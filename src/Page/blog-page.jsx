@@ -1,0 +1,199 @@
+import {useEffect, useState} from "react";
+import RecentPostsCarousel from "../components/recent-post-carousel.jsx";
+import BlogCard from "../components/blog-card.jsx";
+import Pagination from "../components/blog-pagination.jsx";
+import {BookOpen, Users, Award} from 'lucide-react';
+
+const BlogPage = () => {
+    const [blogs, setBlogs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [scrollY, setScrollY] = useState(0);
+    const blogsPerPage = 12;
+
+    // Track scroll for navbar compatibility
+    useEffect(() => {
+        const handleScroll = () => setScrollY(window.scrollY);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const fetchBlogs = async () => {
+            try {
+                const response = await fetch('https://dewavefreeapi20250731173800.azurewebsites.net/api/blogs');
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch blogs');
+                }
+
+                const data = await response.json();
+                setBlogs(data);
+            } catch (err) {
+                setError(err.message);
+                // Fallback sample data for demo
+                const sampleBlogs = [];
+                for (let i = 1; i <= 25; i++) {
+                    sampleBlogs.push({
+                        id: i,
+                        title: `Blog Post ${i}: ${['React Fundamentals', 'CSS Mastery', 'JavaScript Tips', 'UI/UX Design', 'Backend Development'][i % 5]}`,
+                        slug: `blog-post-${i}`,
+                        authorId: (i % 4) + 1,
+                        summary: `This is a comprehensive guide about ${['React development', 'CSS styling techniques', 'JavaScript best practices', 'design principles', 'server-side programming'][i % 5]}. Learn the essential concepts and practical applications.`,
+                        thumbnailUrl: "",
+                        categoryId: (i % 3) + 1,
+                        status: i % 10 === 0 ? "draft" : "published",
+                        createdAt: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString(),
+                        updatedAt: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString(),
+                        publishedAt: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString()
+                    });
+                }
+                setBlogs(sampleBlogs);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBlogs();
+    }, []);
+
+    // Pagination logic
+    const totalPages = Math.ceil(blogs.length / blogsPerPage);
+    const startIndex = (currentPage - 1) * blogsPerPage;
+    const currentBlogs = blogs.slice(startIndex, startIndex + blogsPerPage);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        // Calculate navbar height for smooth scroll
+        const maxLogoScroll = 100;
+        const logoHeight = Math.max(0, 48 - scrollY / 2);
+        const navbarHeight = 80;
+        const totalNavbarHeight = logoHeight + navbarHeight;
+
+        // Scroll to top accounting for navbar
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    // Calculate navbar height based on scroll position (same logic as navbar)
+    const maxLogoScroll = 100;
+    const logoHeight = Math.max(0, 48 - scrollY / 2);
+    const navbarHeight = 80; // 20 * 4 = 80px (h-20)
+    const totalNavbarHeight = logoHeight + navbarHeight;
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-8 h-8 border-2 border-[#836953] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading stories...</p>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+            {/* Spacer for fixed navbar */}
+            <div
+                className="w-full transition-all duration-300 ease-in-out"
+                style={{ height: `${totalNavbarHeight}px` }}
+            />
+
+            {/* Compact Luxurious Header */}
+            <div className="relative overflow-hidden bg-gradient-to-r from-[#836953] via-[#9d7d65] to-[#836953]">
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute inset-0" style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.3'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
+                    }}>
+                    </div>
+                </div>
+
+                <div className="relative max-w-7xl mx-auto px-6 py-12">
+                    <div className="text-center text-white">
+                        <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 mb-4">
+                            <BookOpen size={16} />
+                            <span className="text-xs font-medium">Content Hub</span>
+                        </div>
+
+                        <h1 className="text-3xl md:text-4xl font-bold mb-3">Stories & Insights</h1>
+                        <p className="text-gray-200 max-w-xl mx-auto text-sm leading-relaxed">
+                            Discover expert insights and practical tutorials from our community
+                        </p>
+
+                        <div className="flex items-center justify-center gap-4 text-xs mt-4">
+                            <div className="flex items-center gap-1">
+                                <BookOpen size={14} />
+                                <span>{blogs.length} Articles</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <Users size={14} />
+                                <span>Expert Authors</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <Award size={14} />
+                                <span>Quality Content</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="absolute bottom-0 left-0 w-full overflow-hidden">
+                    <svg className="relative block w-full h-6" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" fill="rgb(249, 250, 251)"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <main className="max-w-7xl mx-auto px-6 py-8">
+                {error && (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-6">
+                        <p className="text-yellow-800 text-sm">
+                            Could not fetch blogs from API. Showing sample data instead.
+                        </p>
+                    </div>
+                )}
+
+                {/* Recent Posts Carousel */}
+                <RecentPostsCarousel blogs={blogs.slice(0, 8)} />
+
+                {/* All Posts with Pagination */}
+                <section>
+                    <div className="text-center mb-6">
+                        <h2 className="text-xl font-bold text-gray-900 mb-1">All Stories</h2>
+                        <p className="text-gray-600 text-sm">Page {currentPage} of {totalPages}</p>
+
+                        <div className="relative mx-auto w-20 h-0.5 bg-gradient-to-r from-transparent via-[#836953] to-transparent rounded-full mt-3"></div>
+                    </div>
+
+                    {blogs.length === 0 ? (
+                        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+                            <BookOpen size={32} className="text-gray-400 mx-auto mb-4" />
+                            <p className="text-gray-500">No stories available</p>
+                        </div>
+                    ) : (
+                        <>
+                            {/* Adjusted grid */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                {currentBlogs.map((blog, index) => (
+                                    <BlogCard key={blog.id} blog={blog} index={index} />
+                                ))}
+                            </div>
+
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            />
+                        </>
+                    )}
+                </section>
+            </main>
+        </div>
+    );
+};
+
+export default BlogPage;
