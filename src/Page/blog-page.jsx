@@ -103,46 +103,56 @@ const BlogPage = () => {
                 style={{ height: `${totalNavbarHeight}px` }}
             />
 
-            {/* Compact Luxurious Header */}
+            {/* Hero Header Section - Course Style */}
             <div className="relative overflow-hidden bg-gradient-to-r from-[#836953] via-[#9d7d65] to-[#836953]">
+                {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0" style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.3'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
                     }}>
                     </div>
                 </div>
 
-                <div className="relative max-w-7xl mx-auto px-6 py-12">
+                {/* Floating Elements */}
+                <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-bounce" style={{ animationDelay: '0s', animationDuration: '3s' }}></div>
+                <div className="absolute top-32 right-20 w-16 h-16 bg-white/10 rounded-full animate-bounce" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
+                <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-bounce" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
+
+                <div className="relative max-w-7xl mx-auto px-6 py-20">
                     <div className="text-center text-white">
-                        <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 mb-4">
-                            <BookOpen size={16} />
-                            <span className="text-xs font-medium">Content Hub</span>
+                        <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 animate-fadeIn">
+                            <BookOpen size={20} />
+                            <span className="text-sm font-medium">Content Hub</span>
                         </div>
 
-                        <h1 className="text-3xl md:text-4xl font-bold mb-3">Stories & Insights</h1>
-                        <p className="text-gray-200 max-w-xl mx-auto text-sm leading-relaxed">
+                        <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-white to-gray-200 bg-clip-text text-transparent leading-tight md:leading-snug animate-slideInUp">
+                            Stories & Insights
+                        </h1>
+
+                        <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed animate-slideInUp" style={{ animationDelay: '0.2s' }}>
                             Discover expert insights and practical tutorials from our community
                         </p>
 
-                        <div className="flex items-center justify-center gap-4 text-xs mt-4">
-                            <div className="flex items-center gap-1">
-                                <BookOpen size={14} />
+                        <div className="flex items-center justify-center gap-8 text-sm animate-slideInUp" style={{ animationDelay: '0.4s' }}>
+                            <div className="flex items-center gap-2">
+                                <BookOpen size={18} />
                                 <span>{blogs.length} Articles</span>
                             </div>
-                            <div className="flex items-center gap-1">
-                                <Users size={14} />
+                            <div className="flex items-center gap-2">
+                                <Users size={18} />
                                 <span>Expert Authors</span>
                             </div>
-                            <div className="flex items-center gap-1">
-                                <Award size={14} />
+                            <div className="flex items-center gap-2">
+                                <Award size={18} />
                                 <span>Quality Content</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {/* Wave Bottom */}
                 <div className="absolute bottom-0 left-0 w-full overflow-hidden">
-                    <svg className="relative block w-full h-6" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <svg className="relative block w-full h-12" viewBox="0 0 1200 120" preserveAspectRatio="none">
                         <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" fill="rgb(249, 250, 251)"></path>
                     </svg>
                 </div>
@@ -192,6 +202,48 @@ const BlogPage = () => {
                     )}
                 </section>
             </main>
+
+            <style jsx>{`
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(30px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                @keyframes slideInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(60px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                    }
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                .animate-fadeIn {
+                    animation: fadeIn 0.8s ease-out forwards;
+                }
+
+                .animate-slideInUp {
+                    animation: slideInUp 0.8s ease-out forwards;
+                    opacity: 0;
+                }
+            `}</style>
         </div>
     );
 };

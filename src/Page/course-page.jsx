@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Clock, Star, ChevronDown, BookOpen, Users, Award } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, BookOpen, Users, Award } from 'lucide-react';
+import CourseCard from "../components/course-card.jsx";
 
 const CoursePage = () => {
     const [categories, setCategories] = useState([]);
@@ -60,23 +61,6 @@ const CoursePage = () => {
         }));
     };
 
-    const formatDuration = (minutes) => {
-        if (!minutes) return 'N/A';
-        const hours = Math.floor(minutes / 60);
-        const mins = minutes % 60;
-        return hours > 0
-            ? mins > 0
-                ? `${hours}h ${mins}m`
-                : `${hours}h`
-            : `${mins}m`;
-    };
-
-    const handleCourseClick = (courseId) => {
-        console.log(`Navigate to course: ${courseId}`);
-        // Add your navigation logic here
-        // navigate(`/course/${courseId}`);
-    };
-
     const getCoursesByCategory = (categoryId) => {
         return courses.filter(course => course.categoryId === categoryId);
     };
@@ -86,50 +70,6 @@ const CoursePage = () => {
     const logoHeight = Math.max(0, 48 - scrollY / 2);
     const navbarHeight = 80; // 20 * 4 = 80px (h-20)
     const totalNavbarHeight = logoHeight + navbarHeight;
-
-    const CourseCard = ({ course }) => {
-        return (
-            <div
-                className="group bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-xl hover:border-[#836953]/30 hover:-translate-y-2 transform"
-                onClick={() => handleCourseClick(course.id)}
-            >
-                <div className="relative overflow-hidden">
-                    <img
-                        src={course.image?.trim() || "/no-image.png"}
-                        alt={course.title}
-                        onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "/no-image.png";
-                        }}
-                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-
-                <div className="p-5">
-                    <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight group-hover:text-[#836953] transition-colors duration-300">
-                        {course.title}
-                    </h3>
-
-                    <div className="flex items-center gap-4 mb-3 text-sm text-gray-600">
-                        <div className="flex items-center gap-1">
-                            <Star size={16} fill="#836953" className="text-[#836953]" />
-                            <span>{course.rating ? course.rating.toFixed(1) : 'N/A'}</span>
-                        </div>
-
-                        <div className="flex items-center gap-1">
-                            <Clock size={16} className="text-[#836953]" />
-                            <span>{formatDuration(course.duration)}</span>
-                        </div>
-                    </div>
-
-                    <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
-                        {course.description || "No description available"}
-                    </p>
-                </div>
-            </div>
-        );
-    };
 
     if (loading) {
         return (
@@ -188,7 +128,7 @@ const CoursePage = () => {
                             <span className="text-sm font-medium">Premium Learning Platform</span>
                         </div>
 
-                        <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-white to-gray-200 bg-clip-text text-transparent animate-slideInUp">
+                        <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-white to-gray-200 bg-clip-text text-transparent leading-tight md:leading-snug animate-slideInUp">
                             Explore Course Categories
                         </h1>
 
@@ -347,20 +287,6 @@ const CoursePage = () => {
                     to {
                         opacity: 1;
                     }
-                }
-
-                .line-clamp-2 {
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                }
-
-                .line-clamp-3 {
-                    display: -webkit-box;
-                    -webkit-line-clamp: 3;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
                 }
 
                 .animate-fadeIn {
