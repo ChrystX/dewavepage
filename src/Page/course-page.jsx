@@ -66,7 +66,6 @@ const CoursePage = () => {
     };
 
     // Calculate navbar height based on scroll position (same logic as navbar)
-    const maxLogoScroll = 100;
     const logoHeight = Math.max(0, 48 - scrollY / 2);
     const navbarHeight = 80; // 20 * 4 = 80px (h-20)
     const totalNavbarHeight = logoHeight + navbarHeight;
@@ -218,7 +217,7 @@ const CoursePage = () => {
                                     {/* Courses Grid */}
                                     {visibleCoursesList.length > 0 ? (
                                         <>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                            <div className="grid grid-cols-3 gap-8">
                                                 {visibleCoursesList.map((course, index) => (
                                                     <CourseCard
                                                         key={course.id}
@@ -227,16 +226,16 @@ const CoursePage = () => {
                                                 ))}
                                             </div>
 
-                                            {/* Load More Button */}
+                                            {/* Load More Button - Mobile Responsive */}
                                             {hasMoreCourses && (
                                                 <div className="flex justify-center pt-8">
                                                     <button
                                                         onClick={() => loadMoreCourses(category.id)}
-                                                        className="group relative overflow-hidden flex items-center gap-3 px-8 py-4 bg-white border-2 border-[#836953] text-[#836953] rounded-full hover:text-white transition-all duration-500 font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                                                        className="group relative overflow-hidden flex items-center gap-2 md:gap-3 px-4 py-2.5 md:px-8 md:py-4 bg-white border-2 border-[#836953] text-[#836953] rounded-full hover:text-white transition-all duration-500 font-medium text-sm md:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                                                     >
                                                         <div className="absolute inset-0 bg-[#836953] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-                                                        <span className="relative z-10">Load More Courses</span>
-                                                        <ChevronDown size={18} className="relative z-10 group-hover:animate-bounce" />
+                                                        <span className="relative z-10">Load More</span>
+                                                        <ChevronDown size={16} className="relative z-10 group-hover:animate-bounce md:size-[18px]" />
                                                     </button>
                                                 </div>
                                             )}

@@ -2,6 +2,25 @@ import React from "react";
 import LocationMap from "./map.jsx";
 
 export default function Footer() {
+    const awards = [
+        "/20 BEST CHOICE BUSINESS 2024.png",
+        "/BEST CHOICE BUSINESS 2024.png",
+        "/BEST FRANCHISE 2022.png",
+        "/BUSINESS OPPORTUNITY 2022.jpg",
+        "/BUSINESS OPPORTUNITY 2023.png",
+        "/INDONESIA CREATIVITY & BEST LEADER AWARD 2023.png",
+        "/LOGO MOST INNOVATIVE BO 2024.png",
+        "/TOP Best Choice.png",
+        "/TOP FRANCHISE 2021.png",
+        "/TOP 20 BUSINESS OPPORTUNITY 2023.png",
+    ];
+
+    // Filter awards from 2022 and above
+    const recentAwards = awards.filter(award => {
+        const year = award.match(/(\d{4})/);
+        return year && parseInt(year[1]) >= 2022;
+    });
+
     return (
         <footer className="text-white py-6 md:py-12 bg-[#836953]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,9 +83,21 @@ export default function Footer() {
                                 Jl. Mangkuyudan No.45, Mantrijeron,<br />
                                 Kota Yogyakarta, DIY 55143, Indonesia
                             </p>
-                            <p className="text-sm text-gray-100 dm-serif-text-regular">
+                            <p className="text-sm text-gray-100 dm-serif-text-regular mb-4">
                                 Phone: <a href="tel:+6282242752668" className="hover:text-yellow-200 transition-colors">+62 822-4275-2668</a>
                             </p>
+
+                            {/* Awards - Subtle and Small */}
+                            <div className="flex flex-wrap gap-1.5">
+                                {recentAwards.slice(0, 4).map((award, i) => (
+                                    <img
+                                        key={i}
+                                        src={award}
+                                        alt={`Award ${i + 1}`}
+                                        className="h-8 w-auto opacity-80 hover:opacity-100 transition-opacity"
+                                    />
+                                ))}
+                            </div>
                         </div>
 
                         {/* Navigation */}
@@ -104,6 +135,8 @@ export default function Footer() {
                                 ))}
                             </div>
                         </div>
+
+
 
                         {/* Map */}
                         <div className="lg:col-span-1">

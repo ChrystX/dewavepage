@@ -1,20 +1,26 @@
 import React, { useEffect, useRef } from 'react';
 
 const Affiliates = () => {
+    // Combined all unique awards from both arrays with proper company names
     const logos = [
-        { id: 1, name: 'Company A', url: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg' },
-        { id: 2, name: 'Company B', url: 'https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png' },
-        { id: 3, name: 'Company C', url: 'https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg' },
-        { id: 4, name: 'Company D', url: 'https://upload.wikimedia.org/wikipedia/commons/4/45/F1_logo.svg' },
-        { id: 5, name: 'Company E', url: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Moto_Gp_logo.svg' },
-        { id: 6, name: 'Company F', url: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg' },
+        { id: 1, name: 'TOP Best Choice Award', url: "/TOP Best Choice.png" },
+        { id: 2, name: 'Indonesia Creativity & Best Leader', url: "/INDONESIA CREATIVITY & BEST LEADER AWARD 2023.png" },
+        { id: 3, name: 'Business Opportunity 2023', url: "/BUSINESS OPPORTUNITY 2023.png" },
+        { id: 4, name: 'Best Franchise 2022', url: "/BEST FRANCHISE 2022.png" },
+        { id: 5, name: '20 Best Choice Business', url: "/20 BEST CHOICE BUSINESS 2024.png" },
+        { id: 6, name: 'TOP 20 Business Opportunity', url: "/TOP 20 BUSINESS OPPORTUNITY 2023.png" },
+        { id: 7, name: 'Top Franchise 2021', url: "/TOP FRANCHISE 2021.png" },
+        { id: 8, name: 'Most Innovative BO', url: "/LOGO MOST INNOVATIVE BO 2024.png" },
+        { id: 9, name: 'Best Choice Business 2024', url: "/BEST CHOICE BUSINESS 2024.png" },
+        { id: 10, name: 'Business Opportunity 2022', url: "/BUSINESS OPPORTUNITY 2022.jpg" },
+        { id: 11, name: 'Most Promising Brand', url: "/MOST PROMISING BRAND 2019.png" },
     ];
 
     return (
         <div className="w-full py-12 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4">
                 <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">
-                    Our Trusted Partners
+                    Awards & Recognition
                 </h2>
                 <GSAPZigzagLogos logos={logos} />
             </div>
@@ -74,7 +80,9 @@ const GSAPZigzagLogos = ({ logos }) => {
                 {[0, 1, 2].map((setIndex) => (
                     <React.Fragment key={setIndex}>
                         {logos.map((logo, index) => {
-                            const isTop = index % 2 === 0;
+                            // Calculate global index across all sets for continuous zigzag
+                            const globalIndex = (setIndex * logos.length) + index;
+                            const isTop = globalIndex % 2 === 0;
 
                             return (
                                 <div

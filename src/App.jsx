@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Add this import
+import {BrowserRouter as Router, Routes, Route, useLocation} from 'react-router-dom'; // Add this import
 import Navbar from "./components/navbar.jsx";
 import {useEffect, useRef, useState} from 'react';
 import { gsap } from 'gsap';
@@ -14,6 +14,41 @@ import CoursePage from "./Page/course-page.jsx";
 import BlogPage from "./Page/blog-page.jsx";
 import BlogDetail from "./Page/blog-detail.jsx";
 import BlogCarouselSection from "./sections/blog-section.jsx";
+import SweeperSection from "./sections/sweeper-section.jsx";
+import CategoryCourseSection from "./sections/category-course-section.jsx";
+import AdminApplicationDashboard from "./admin_page/application_page.jsx";
+import AdminCourseDashboard from "./admin_page/admin_course_page.jsx";
+import AdminCategoryDashboard from "./admin_page/category_page.jsx";
+import Test from "./Page/test.jsx";
+import AdminBlogDashboard from "./admin_page/admin_blog_page.jsx";
+
+const NotFoundPage = () => {
+    return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
+            <div className="text-center">
+                <h1 className="text-9xl font-bold text-gray-300">404</h1>
+                <h2 className="text-3xl font-semibold text-gray-700 mt-4">Page Not Found</h2>
+                <p className="text-gray-500 mt-4 mb-8">
+                    The page you're looking for doesn't exist.
+                </p>
+                <div className="space-x-4">
+                    <button
+                        onClick={() => window.history.back()}
+                        className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                    >
+                        Go Back
+                    </button>
+                    <a
+                        href="/"
+                        className="inline-block px-6 py-3 bg-[#d4af7a] text-gray-900 rounded-lg hover:bg-[#e6c490] transition-colors"
+                    >
+                        Go Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 // Create a Home component with your existing content
 const HomePage = () => {
@@ -94,7 +129,8 @@ const HomePage = () => {
                 </div>
             </main>
             <Affiliates />
-            <CoursesSection />
+            <CategoryCourseSection />
+            <SweeperSection />
             <BlogCarouselSection />
             <TestimonialSection />
             <SignUpSection />
@@ -102,27 +138,46 @@ const HomePage = () => {
     );
 };
 
+
+function Layout({ children }) {
+    const location = useLocation();
+    const isAdminRoute = location.pathname.startsWith("/admin");
+
+    return (
+        <div className="flex flex-col min-h-screen">
+            {/* Show Navbar only if not admin */}
+            {!isAdminRoute && <Navbar />}
+
+            <main className="flex-grow">{children}</main>
+
+            {/* Footer stays at bottom always */}
+            <Footer />
+        </div>
+    );
+}
+
 function App() {
     return (
         <Router>
-            <div className="flex flex-col min-h-screen">
-                {/* Routes container that will expand */}
-                <Navbar />
+            <Layout>
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/course/:courseId" element={<CourseDetailPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/course" element={<CoursePage />} />
+                    <Route path="/blog" element={<BlogPage />} />
+                    <Route path="/blog/:blogId" element={<BlogDetail />} />
+                    <Route path="*" element={<NotFoundPage />} />
 
-                <main className="flex-grow">
-                    <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/course/:courseId" element={<CourseDetailPage />} />
-                        <Route path="/about" element={<AboutPage />} />
-                        <Route path="/course" element={<CoursePage />} />
-                        <Route path="/blog" element={<BlogPage />} />
-                        <Route path="/blog/:blogId" element={<BlogDetail />} />
-                    </Routes>
-                </main>
+                    {/* Admin routes */}
+                    <Route path="/admin/application" element={<AdminApplicationDashboard />} />
+                    <Route path="/admin/categories" element={<AdminCategoryDashboard />} />
+                    <Route path="/admin/courses" element={<AdminCourseDashboard />} />
+                    <Route path="/admin/blogs" element={<AdminBlogDashboard />} />
 
-                {/* Footer stays at bottom */}
-                <Footer />
-            </div>
+                    <Route path="/test" element={<Test />} />
+                </Routes>
+            </Layout>
         </Router>
     );
 }

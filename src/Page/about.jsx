@@ -33,6 +33,20 @@ const useInView = (threshold = 0.1) => {
     return [setElementRef, isInView];
 };
 
+const awards = [
+    "/20 BEST CHOICE BUSINESS 2024.png",
+    "/BEST CHOICE BUSINESS 2024.png",
+    "/BEST FRANCHISE 2022.png",
+    "/BUSINESS OPPORTUNITY 2022.jpg",
+    "/BUSINESS OPPORTUNITY 2023.png",
+    "/INDONESIA CREATIVITY & BEST LEADER AWARD 2023.png",
+    "/LOGO MOST INNOVATIVE BO 2024.png",
+    "/MOST PROMISING BRAND 2019.png",
+    "/TOP Best Choice.png",
+    "/TOP FRANCHISE 2021.png",
+    "/TOP 20 BUSINESS OPPORTUNITY 2023.png",
+];
+
 // Counter animation hook
 const useCounter = (end, duration = 2000, isActive = false) => {
     const [count, setCount] = useState(0);
@@ -114,6 +128,7 @@ const AboutPage = () => {
     const [statsRef, statsInView] = useInView(0.2);
     const [ceoRef, ceoInView] = useInView(0.2);
     const [storyRef, storyInView] = useInView(0.2);
+    const [awardsRef, awardsInView] = useInView(0.2);
 
     return (
         <div className="min-h-screen bg-white overflow-x-hidden"
@@ -323,6 +338,31 @@ const AboutPage = () => {
                 </div>
             </section>
 
+            <section ref={awardsRef} className="w-full bg-gray-50 py-12">
+                <div className="max-w-6xl mx-auto text-center px-4">
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-8" style={{ color: "#836953" }}>
+                        Our Awards & Recognition
+                    </h2>
+
+                    <div className="flex flex-wrap justify-center gap-6">
+                        {awards.map((src, i) => (
+                            <div
+                                key={i}
+                                className="w-16 flex-shrink-0"
+                            >
+                                <img
+                                    src={src}
+                                    alt={`Award ${i + 1}`}
+                                    className={`h-16 w-auto object-contain mx-auto transform transition-all duration-700 ${
+                                        awardsInView ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+                                    }`}
+                                    style={{ transitionDelay: `${i * 100}ms` }}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
 
         </div>
     );
