@@ -33,7 +33,7 @@ const SweeperSection = () => {
         return (
             <section className="px-4 py-12 bg-gray-50">
                 <div className="max-w-6xl mx-auto flex justify-center items-center">
-                    <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-8 h-8 border-4 border-[#e91e63] border-t-transparent rounded-full animate-spin"></div>
                     <p className="ml-3 text-gray-600 text-sm sm:text-base">
                         Loading courses...
                     </p>
@@ -49,7 +49,7 @@ const SweeperSection = () => {
                     <p className="text-red-600">Error: {error}</p>
                     <button
                         onClick={fetchCourses}
-                        className="mt-4 px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors"
+                        className="mt-4 px-4 py-2 bg-[#e91e63] text-white text-sm rounded-lg hover:bg-[#c2185b] transition-colors"
                     >
                         Try Again
                     </button>
@@ -73,7 +73,7 @@ const SweeperSection = () => {
                     </p>
                     <button
                         onClick={() => navigate("/course")}
-                        className="px-6 py-3 bg-blue-600 text-white text-sm sm:text-base font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg active:scale-95"
+                        className="px-6 py-3 bg-[#e91e63] text-white text-sm sm:text-base font-medium rounded-lg hover:bg-[#c2185b] transition-all duration-200 shadow-md hover:shadow-lg active:scale-95"
                     >
                         Browse All Courses
                     </button>

@@ -190,13 +190,16 @@ const CategoryCourseSection = () => {
     const filteredCourses = courses.filter(c => c.categoryId === selectedCategory.id);
 
     return (
-        <div className="max-w-6xl mx-auto p-4 md:p-6">
+        <div className="max-w-7xl mx-auto p-4 md:p-6">
             {/* Categories */}
-            <div className="mb-8 md:mb-12">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">Training Categories</h1>
+            <div className="mb-6 md:mb-10">
+                {/* Centered heading */}
+                <div className="text-center mb-6 md:mb-8">
+                    <h1 className="text-xl md:text-3xl font-bold text-gray-900">Training Categories</h1>
+                </div>
 
                 {/* Desktop Categories */}
-                <div className="hidden md:flex gap-6">
+                <div className="hidden md:flex gap-4 lg:gap-6">
                     {categories.map(cat => (
                         <div key={cat.id} className="flex-1">
                             <CategoryCard
@@ -208,61 +211,69 @@ const CategoryCourseSection = () => {
                     ))}
                 </div>
 
-                {/* Mobile Categories - Horizontal menu with bottom line indicators */}
+                {/* Mobile Categories - Centered horizontal menu */}
                 <div className="md:hidden">
-                    <div className="flex overflow-x-auto scrollbar-hide border-b border-gray-200 pb-1">
-                        {categories.map(cat => (
-                            <button
-                                key={cat.id}
-                                onClick={() => setSelectedCategory(cat)}
-                                className={`flex-shrink-0 px-3 py-2 text-xs font-medium transition-colors duration-200 whitespace-nowrap relative ${
-                                    selectedCategory.id === cat.id
-                                        ? 'text-blue-600'
-                                        : 'text-gray-500 hover:text-gray-700'
-                                }`}
-                            >
-                                {cat.name}
-                                {selectedCategory.id === cat.id && (
-                                    <div className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-blue-600 rounded"></div>
-                                )}
-                            </button>
-                        ))}
+                    <div className="flex justify-center">
+                        <div className="flex overflow-x-auto scrollbar-hide border-b border-gray-200 pb-2 max-w-full">
+                            {categories.map(cat => (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setSelectedCategory(cat)}
+                                    className={`flex-shrink-0 px-4 py-2 text-sm font-medium transition-colors duration-200 whitespace-nowrap relative ${
+                                        selectedCategory.id === cat.id
+                                            ? 'text-[#e91e63]'
+                                            : 'text-gray-500 hover:text-gray-700'
+                                    }`}
+                                >
+                                    {cat.name}
+                                    {selectedCategory.id === cat.id && (
+                                        <div className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-[#e91e63] rounded"></div>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Courses */}
-            <div className="border border-gray-200 rounded-md p-4 md:p-6">
-                <div className="flex flex-col md:flex-row md:gap-8">
+            <div className="border border-gray-200 rounded-lg p-4 md:p-6 bg-white shadow-sm">
+                <div className="flex flex-col lg:flex-row lg:gap-8">
                     {/* Left side - Category Info */}
-                    <div className="md:w-80 md:flex-shrink-0 mb-6 md:mb-0">
-                        <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">
+                    <div className="lg:w-80 lg:flex-shrink-0 mb-6 lg:mb-0">
+                        <h2 className="text-lg md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">
                             {selectedCategory.name}
                         </h2>
-                        <p className="text-gray-600 text-sm leading-relaxed mb-3 md:mb-4">
+                        <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-3 md:mb-4">
                             {selectedCategory.description}
                         </p>
                         <div className="space-y-1 text-sm text-gray-500">
-                            <p>{filteredCourses.length} Course{filteredCourses.length > 1 ? 's' : ''}</p>
-                            <p>Professional Training</p>
+                            <p className="flex items-center gap-2">
+                                <span className="w-2 h-2 bg-[#e91e63] rounded-full"></span>
+                                {filteredCourses.length} Course{filteredCourses.length > 1 ? 's' : ''}
+                            </p>
+                            <p className="flex items-center gap-2">
+                                <span className="w-2 h-2 bg-[#e91e63] rounded-full"></span>
+                                Professional Training
+                            </p>
                         </div>
                     </div>
 
                     {/* Right side - Courses */}
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-base md:text-lg font-medium text-gray-800">Courses</h3>
+                            <h3 className="text-base md:text-lg font-medium text-gray-800">Available Courses</h3>
                             <div className="flex gap-1">
                                 <button
                                     onClick={() => scroll('left')}
-                                    className="p-1.5 hover:bg-gray-100 rounded-md transition-colors duration-200 text-xl font-bold text-gray-600 hover:text-gray-800"
+                                    className="p-2 hover:bg-[#e91e63]/10 rounded-lg transition-colors duration-200 text-lg font-bold text-[#e91e63] hover:text-[#c2185b]"
                                     aria-label="Scroll left"
                                 >
                                     ‹
                                 </button>
                                 <button
                                     onClick={() => scroll('right')}
-                                    className="p-1.5 hover:bg-gray-100 rounded-md transition-colors duration-200 text-xl font-bold text-gray-600 hover:text-gray-800"
+                                    className="p-2 hover:bg-[#e91e63]/10 rounded-lg transition-colors duration-200 text-lg font-bold text-[#e91e63] hover:text-[#c2185b]"
                                     aria-label="Scroll right"
                                 >
                                     ›
@@ -284,14 +295,25 @@ const CategoryCourseSection = () => {
                                 WebkitUserSelect: 'none'
                             }}
                         >
-                            {filteredCourses.map(course => (
-                                <div
-                                    key={course.Id}
-                                    className="flex-none w-72 md:w-80"
-                                >
-                                    <CourseCard course={course} />
+                            {filteredCourses.length > 0 ? (
+                                filteredCourses.map(course => (
+                                    <div
+                                        key={course.Id}
+                                        className="flex-none w-72 md:w-80"
+                                    >
+                                        <CourseCard course={course} />
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="w-full text-center py-8">
+                                    <div className="text-gray-400 mb-2">
+                                        <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                        </svg>
+                                    </div>
+                                    <p className="text-gray-500 text-sm">No courses available in this category</p>
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </div>
                 </div>

@@ -65,10 +65,11 @@ const CoursePage = () => {
         return courses.filter(course => course.categoryId === categoryId);
     };
 
-    // Calculate navbar height based on scroll position (same logic as navbar)
-    const logoHeight = Math.max(0, 48 - scrollY / 2);
-    const navbarHeight = 80; // 20 * 4 = 80px (h-20)
-    const totalNavbarHeight = logoHeight + navbarHeight;
+    // --- Navbar spacing integration ---
+    const logoMaxHeight = 48;   // same as Navbar logo max height
+    const navbarHeight = 80;     // Navbar height (h-20)
+    const logoDynamicHeight = Math.max(0, logoMaxHeight - scrollY / 2);
+    const totalNavbarHeight = logoDynamicHeight + navbarHeight;
 
     if (loading) {
         return (
@@ -208,7 +209,6 @@ const CoursePage = () => {
                                             {categoryCourses.length} courses available
                                         </p>
 
-                                        {/* Decorative Underline */}
                                         <div className="relative mx-auto w-32 h-1 bg-gradient-to-r from-transparent via-[#e91e63] to-transparent rounded-full mb-8">
                                             <div className="absolute inset-0 bg-gradient-to-r from-[#e91e63] to-[#f06292] rounded-full animate-pulse"></div>
                                         </div>
@@ -218,7 +218,7 @@ const CoursePage = () => {
                                     {visibleCoursesList.length > 0 ? (
                                         <>
                                             <div className="grid grid-cols-3 gap-8">
-                                                {visibleCoursesList.map((course, index) => (
+                                                {visibleCoursesList.map((course) => (
                                                     <CourseCard
                                                         key={course.id}
                                                         course={course}
@@ -226,7 +226,6 @@ const CoursePage = () => {
                                                 ))}
                                             </div>
 
-                                            {/* Load More Button - Mobile Responsive */}
                                             {hasMoreCourses && (
                                                 <div className="flex justify-center pt-8">
                                                     <button
@@ -258,44 +257,22 @@ const CoursePage = () => {
 
             <style jsx>{`
                 @keyframes fadeInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(30px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
+                    from { opacity: 0; transform: translateY(30px); }
+                    to { opacity: 1; transform: translateY(0); }
                 }
 
                 @keyframes slideInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(60px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
+                    from { opacity: 0; transform: translateY(60px); }
+                    to { opacity: 1; transform: translateY(0); }
                 }
 
                 @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                    }
-                    to {
-                        opacity: 1;
-                    }
+                    from { opacity: 0; }
+                    to { opacity: 1; }
                 }
 
-                .animate-fadeIn {
-                    animation: fadeIn 0.8s ease-out forwards;
-                }
-
-                .animate-slideInUp {
-                    animation: slideInUp 0.8s ease-out forwards;
-                    opacity: 0;
-                }
+                .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
+                .animate-slideInUp { animation: slideInUp 0.8s ease-out forwards; opacity: 0; }
             `}</style>
         </div>
     );

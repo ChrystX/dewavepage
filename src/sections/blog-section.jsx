@@ -32,9 +32,9 @@ const BlogCarouselSection = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 {/* Section Header */}
                 <div className="text-center mb-10 sm:mb-12">
-                    <div className="inline-flex items-center gap-2 bg-[#836953]/10 backdrop-blur-sm rounded-full px-3 py-1.5 mb-3 sm:px-4 sm:py-2">
+                    <div className="inline-flex items-center gap-2 bg-[#e91e63]/10 backdrop-blur-sm rounded-full px-3 py-1.5 mb-3 sm:px-4 sm:py-2">
                         <svg
-                            className="w-4 h-4 text-[#836953]"
+                            className="w-4 h-4 text-[#e91e63]"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -46,27 +46,27 @@ const BlogCarouselSection = () => {
                                 d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                             ></path>
                         </svg>
-                        <span className="text-xs sm:text-sm font-medium text-[#836953]">
+                        <span className="text-xs sm:text-sm font-medium text-[#e91e63]">
               Latest Insights
             </span>
                     </div>
 
                     <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 leading-snug">
-                        Recent <span className="text-[#836953]">Stories</span>
+                        Recent <span className="text-[#e91e63]">Stories</span>
                     </h2>
                     <p className="text-gray-600 max-w-xl mx-auto text-base sm:text-lg leading-relaxed px-2">
                         Discover the latest insights, tutorials, and expert perspectives from
                         our community
                     </p>
 
-                    <div className="relative mx-auto w-20 sm:w-24 h-1 bg-gradient-to-r from-transparent via-[#836953] to-transparent rounded-full mt-5"></div>
+                    <div className="relative mx-auto w-20 sm:w-24 h-1 bg-gradient-to-r from-transparent via-[#e91e63] to-transparent rounded-full mt-5"></div>
                 </div>
 
                 {/* Content */}
                 <div className="relative">
                     {loading ? (
                         <div className="text-center py-12">
-                            <div className="w-7 h-7 border-2 border-[#836953] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                            <div className="w-7 h-7 border-2 border-[#e91e63] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
                             <p className="text-gray-600 text-sm">Loading stories...</p>
                         </div>
                     ) : error ? (
@@ -76,7 +76,7 @@ const BlogCarouselSection = () => {
                             </p>
                             <a
                                 href="/blog"
-                                className="inline-flex items-center gap-2 text-[#836953] hover:text-[#836953]/80 text-sm font-medium"
+                                className="inline-flex items-center gap-2 text-[#e91e63] hover:text-[#c2185b] text-sm font-medium"
                             >
                                 <span>View All Stories</span>
                                 <svg
@@ -110,7 +110,7 @@ const BlogCarouselSection = () => {
                             <div className="text-center mt-6 sm:mt-8">
                                 <a
                                     href="/blog"
-                                    className="inline-flex items-center gap-2 bg-[#836953] hover:bg-[#6f5746] text-white px-5 py-2.5 rounded-lg shadow-sm transition-colors text-sm sm:text-base"
+                                    className="inline-flex items-center gap-2 bg-[#e91e63] hover:bg-[#c2185b] text-white px-5 py-2.5 rounded-lg shadow-sm transition-colors text-sm sm:text-base"
                                 >
                                     <span>Explore All Stories</span>
                                     <svg
