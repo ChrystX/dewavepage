@@ -88,7 +88,7 @@ const BlogPage = () => {
         return (
             <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="w-8 h-8 border-2 border-[#836953] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <div className="w-8 h-8 border-2 border-[#e91e63] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                     <p className="text-gray-600">Loading stories...</p>
                 </div>
             </div>
@@ -103,8 +103,8 @@ const BlogPage = () => {
                 style={{ height: `${totalNavbarHeight}px` }}
             />
 
-            {/* Hero Header Section - Course Style */}
-            <div className="relative overflow-hidden bg-gradient-to-r from-[#836953] via-[#9d7d65] to-[#836953]">
+            {/* Hero Header Section */}
+            <div className="relative overflow-hidden bg-gradient-to-r from-[#e91e63] via-[#f06292] to-[#e91e63]">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0" style={{
@@ -176,7 +176,7 @@ const BlogPage = () => {
                         <h2 className="text-xl font-bold text-gray-900 mb-1">All Stories</h2>
                         <p className="text-gray-600 text-sm">Page {currentPage} of {totalPages}</p>
 
-                        <div className="relative mx-auto w-20 h-0.5 bg-gradient-to-r from-transparent via-[#836953] to-transparent rounded-full mt-3"></div>
+                        <div className="relative mx-auto w-20 h-0.5 bg-gradient-to-r from-transparent via-[#e91e63] to-transparent rounded-full mt-3"></div>
                     </div>
 
                     {blogs.length === 0 ? (

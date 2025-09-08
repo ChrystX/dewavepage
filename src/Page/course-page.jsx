@@ -74,7 +74,7 @@ const CoursePage = () => {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="w-8 h-8 border-2 border-[#836953] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <div className="w-8 h-8 border-2 border-[#e91e63] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                     <p className="text-gray-600">Loading courses...</p>
                 </div>
             </div>
@@ -88,7 +88,7 @@ const CoursePage = () => {
                     <p className="text-red-600 mb-4">Error loading courses: {error}</p>
                     <button
                         onClick={fetchData}
-                        className="px-4 py-2 bg-[#836953] text-white rounded-lg hover:bg-[#6d5643] transition-colors"
+                        className="px-4 py-2 bg-[#e91e63] text-white rounded-lg hover:bg-[#d01758] transition-colors"
                     >
                         Try Again
                     </button>
@@ -106,7 +106,7 @@ const CoursePage = () => {
             />
 
             {/* Hero Header Section */}
-            <div className="relative overflow-hidden bg-gradient-to-r from-[#836953] via-[#9d7d65] to-[#836953]">
+            <div className="relative overflow-hidden bg-gradient-to-r from-[#e91e63] via-[#f06292] to-[#e91e63]">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0" style={{
@@ -190,7 +190,7 @@ const CoursePage = () => {
                                     {/* Category Header */}
                                     <div className="text-center">
                                         <div className="inline-flex items-center gap-3 mb-4">
-                                            <div className="w-12 h-12 bg-gradient-to-r from-[#836953] to-[#9d7d65] rounded-full flex items-center justify-center">
+                                            <div className="w-12 h-12 bg-gradient-to-r from-[#e91e63] to-[#f06292] rounded-full flex items-center justify-center">
                                                 <BookOpen size={20} className="text-white" />
                                             </div>
                                             <div>
@@ -204,13 +204,13 @@ const CoursePage = () => {
                                             {category.description}
                                         </p>
 
-                                        <p className="text-sm text-[#836953] font-medium mb-6">
+                                        <p className="text-sm text-[#e91e63] font-medium mb-6">
                                             {categoryCourses.length} courses available
                                         </p>
 
                                         {/* Decorative Underline */}
-                                        <div className="relative mx-auto w-32 h-1 bg-gradient-to-r from-transparent via-[#836953] to-transparent rounded-full mb-8">
-                                            <div className="absolute inset-0 bg-gradient-to-r from-[#836953] to-[#9d7d65] rounded-full animate-pulse"></div>
+                                        <div className="relative mx-auto w-32 h-1 bg-gradient-to-r from-transparent via-[#e91e63] to-transparent rounded-full mb-8">
+                                            <div className="absolute inset-0 bg-gradient-to-r from-[#e91e63] to-[#f06292] rounded-full animate-pulse"></div>
                                         </div>
                                     </div>
 
@@ -231,9 +231,9 @@ const CoursePage = () => {
                                                 <div className="flex justify-center pt-8">
                                                     <button
                                                         onClick={() => loadMoreCourses(category.id)}
-                                                        className="group relative overflow-hidden flex items-center gap-2 md:gap-3 px-4 py-2.5 md:px-8 md:py-4 bg-white border-2 border-[#836953] text-[#836953] rounded-full hover:text-white transition-all duration-500 font-medium text-sm md:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                                                        className="group relative overflow-hidden flex items-center gap-2 md:gap-3 px-4 py-2.5 md:px-8 md:py-4 bg-white border-2 border-[#e91e63] text-[#e91e63] rounded-full hover:text-white transition-all duration-500 font-medium text-sm md:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                                                     >
-                                                        <div className="absolute inset-0 bg-[#836953] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                                                        <div className="absolute inset-0 bg-[#e91e63] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                                                         <span className="relative z-10">Load More</span>
                                                         <ChevronDown size={16} className="relative z-10 group-hover:animate-bounce md:size-[18px]" />
                                                     </button>

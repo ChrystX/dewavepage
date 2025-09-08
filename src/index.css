@@ -1,23 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 
 body {
   background-color: #FFFFFF;
 }
 
+/* Updated headings to use Poppins */
 h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 6em;
+  font-weight: 700; /* Bold for h1 */
 }
 
 h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600; /* Semi-bold for h2 */
+}
+
+h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600; /* Semi-bold for h3 */
+}
+
+h4 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500; /* Medium for h4 */
+}
+
+h5 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500; /* Medium for h5 */
+}
+
+/* Updated paragraph to use Poppins */
+p {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400; /* Regular for paragraphs */
 }
 
 .nav-text {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 1.3em;
@@ -303,23 +328,41 @@ h2 {
 
 .signup-button {
   width: 100%;
-  background-color: #111827; /* Tailwind's gray-900 */
+  background-color: #e91e63; /* Vivid pink */
   color: #ffffff;
   padding: 1rem 0;
   font-weight: 500;
-  border: 2px solid #111827; /* Solid black border */
+  border: 2px solid #e91e63; /* Pink border */
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
+  border-radius: 0.5rem; /* Slightly rounded for elegance */
 }
 
 .signup-button:hover {
-  background-color: #FFFFFF; /* Full black on hover */
-  color: #000000; /* Text turns black */
-  border-color: #000000; /* Border remains black */
+  background-color: #ffffff; /* White background on hover */
+  color: #e91e63; /* Text turns pink */
+  border-color: #e91e63; /* Border stays pink */
 }
+
+/* Optional: for stat blocks to match theme */
+.stat-block {
+  border-bottom: 2px solid #e91e63;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.stat-block .value {
+  color: #e91e63; /* Make numbers pop */
+  font-size: 1.875rem; /* 2xl */
+  font-weight: 300;
+}
+.stat-block .label {
+  color: #555; /* Slightly muted text */
+  font-size: 0.875rem; /* sm */
+}
+
 
 .signup-button:focus {
   outline: none;
@@ -508,4 +551,3 @@ h2 {
     opacity: 1;
   }
 }
-
