@@ -12,7 +12,7 @@ export default function TestimonialSection() {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const response = await fetch('http://localhost:3001/api/reviews');
+                const response = await fetch('/api/reviews');
                 const data = await response.json();
 
                 if (Array.isArray(data)) {

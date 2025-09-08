@@ -8,7 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "node server/server.js"
+    "server": "node server/server.js",
+    "start-server": "nodemon server.js",
+    "start": "react-scripts start"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^11.0.0",
@@ -42,6 +44,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "nodemon": "^3.1.10",
     "vite": "^7.0.4",
     "vite-plugin-svgr": "^4.3.0"
   }
