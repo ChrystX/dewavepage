@@ -3,7 +3,7 @@ import SignUpForm from "../components/action-form.jsx";
 
 export default function SignUpSection() {
     return (
-        <div className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
             <div className="max-w-6xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
@@ -30,8 +30,8 @@ export default function SignUpSection() {
 function StatBlock({ value, label }) {
     return (
         <div className="text-center lg:text-left">
-            <div className="border-b border-[#836953] pb-3 mb-3">
-                <div className="text-2xl lg:text-3xl font-light text-gray-900 mb-1">
+            <div className="border-b-2 border-pink-600 pb-3 mb-3">
+                <div className="text-2xl lg:text-3xl font-light text-pink-600 mb-1">
                     {value}
                 </div>
                 <div className="text-gray-600 font-light text-sm">

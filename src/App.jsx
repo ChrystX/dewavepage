@@ -80,7 +80,7 @@ const HomePage = () => {
                     <div className="w-full">
                         <h1
                             className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight sm:leading-tight md:leading-tight lg:leading-tight font-light tracking-wide"
-                            style={{ fontFamily: "Crimson Text, serif" }}
+                            style={{ fontFamily: "Poppins, sans-serif" }}
                         >
                             Welcome to{" "}
                             <span className="block sm:block md:inline lg:inline text-[#d4af7a] font-normal mt-2 sm:mt-2 md:mt-0 lg:mt-0">

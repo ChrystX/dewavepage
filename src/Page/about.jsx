@@ -2,13 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { MapPin, Phone, Clock, Users, Award, Heart, Star, Calendar, Trophy, BookOpen } from 'lucide-react';
 import LocationSection from "../sections/map-section.jsx";
 
-// Note: LocationSection should be imported from a separate component file
-// import LocationSection from '../components/LocationSection';
-
-// For this demo, we'll include a placeholder comment
-// In your actual implementation, remove the LocationSection component code from here
-// and import it from '../components/LocationSection.jsx' or similar
-
 // Animation hook for intersection observer
 const useInView = (threshold = 0.1) => {
     const [isInView, setIsInView] = useState(false);
@@ -78,6 +71,28 @@ const useCounter = (end, duration = 2000, isActive = false) => {
     return count;
 };
 
+// Hook to calculate navbar height
+const useNavbarHeight = () => {
+    const [navbarHeight, setNavbarHeight] = useState(68); // Initial height (48px logo + 20px nav)
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            const maxLogoScroll = 100;
+            const logoHeight = Math.max(0, 48 - scrollY / 2);
+            const totalHeight = logoHeight + 80; // 80px is the nav height
+            setNavbarHeight(totalHeight);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Call once to set initial value
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    return navbarHeight;
+};
+
 // Animated stats card component
 const AnimatedStatsCard = ({ icon: Icon, number, suffix = '', label, description, delay = 0, isVisible }) => {
     const animatedNumber = useCounter(parseInt(number), 2000, isVisible);
@@ -89,15 +104,15 @@ const AnimatedStatsCard = ({ icon: Icon, number, suffix = '', label, description
                 isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
             }`}
             style={{
-                borderTopColor: '#836953',
+                borderTopColor: '#E91E63',
                 transitionDelay: `${delay}ms`
             }}
         >
             <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center transform transition-transform duration-500 hover:scale-110"
-                 style={{ backgroundColor: '#836953' }}>
+                 style={{ backgroundColor: '#E91E63' }}>
                 <Icon className="w-6 h-6 text-white" />
             </div>
-            <div className="text-2xl sm:text-3xl font-light mb-2" style={{ color: '#836953' }}>
+            <div className="text-2xl sm:text-3xl font-light mb-2" style={{ color: '#E91E63' }}>
                 {displayNumber}{suffix}
             </div>
             <p className="text-gray-600 font-medium text-sm sm:text-base">{label}</p>
@@ -115,10 +130,10 @@ const TimelineCard = ({ icon: Icon, year, title, description, delay = 0, isVisib
         style={{ transitionDelay: `${delay}ms` }}
     >
         <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-4 flex items-center justify-center transform transition-transform duration-500 hover:scale-110 hover:rotate-12"
-             style={{ backgroundColor: '#836953' }}>
+             style={{ backgroundColor: '#E91E63' }}>
             <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
         </div>
-        <h3 className="text-lg sm:text-xl font-medium mb-3" style={{ color: '#836953' }}>{year} - {title}</h3>
+        <h3 className="text-lg sm:text-xl font-medium mb-3" style={{ color: '#E91E63' }}>{year} - {title}</h3>
         <p className="text-gray-600 text-sm sm:text-base leading-relaxed px-2">{description}</p>
     </div>
 );
@@ -130,15 +145,17 @@ const AboutPage = () => {
     const [storyRef, storyInView] = useInView(0.2);
     const [awardsRef, awardsInView] = useInView(0.2);
 
+    const navbarHeight = useNavbarHeight();
+
     return (
         <div className="min-h-screen bg-white overflow-x-hidden"
-             style={{ paddingTop: "100px" }}>
+             style={{ paddingTop: `${navbarHeight + 20}px` }}>
 
             {/* Vision Section */}
             <section
                 ref={visionRef}
                 className="py-12 sm:py-20 relative"
-                style={{ backgroundColor: '#836953' }}
+                style={{ backgroundColor: '#E91E63' }}
             >
                 <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent"></div>
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -242,14 +259,14 @@ const AboutPage = () => {
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                         <div className="grid lg:grid-cols-2 gap-0">
-                            <div className={`bg-gradient-to-br from-gray-100 to-gray-200 h-64 sm:h-96 lg:h-auto flex items-center justify-center transform transition-all duration-1000 ${
+                            <div className={`bg-gradient-to-br from-pink-50 to-pink-100 h-64 sm:h-96 lg:h-auto flex items-center justify-center transform transition-all duration-1000 ${
                                 ceoInView ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
                             }`}>
                                 <div className="text-center">
-                                    <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg transform transition-transform duration-500 hover:scale-105">
-                                        <p className="text-gray-600 text-xs sm:text-sm">CEO Photo</p>
+                                    <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-pink-200 to-pink-300 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg transform transition-transform duration-500 hover:scale-105">
+                                        <p className="text-pink-600 text-xs sm:text-sm">CEO Photo</p>
                                     </div>
-                                    <h3 className="text-lg sm:text-xl font-medium" style={{ color: '#836953' }}>Sarah Johnson</h3>
+                                    <h3 className="text-lg sm:text-xl font-medium" style={{ color: '#E91E63' }}>Sarah Johnson</h3>
                                     <p className="text-gray-600 text-sm sm:text-base">Founder & CEO</p>
                                 </div>
                             </div>
@@ -257,7 +274,7 @@ const AboutPage = () => {
                             <div className={`p-6 sm:p-8 lg:p-12 transform transition-all duration-1000 delay-300 ${
                                 ceoInView ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0'
                             }`}>
-                                <h2 className="text-2xl sm:text-3xl font-light mb-4 sm:mb-6" style={{ color: '#836953' }}>
+                                <h2 className="text-2xl sm:text-3xl font-light mb-4 sm:mb-6" style={{ color: '#E91E63' }}>
                                     A Message from Our Founder
                                 </h2>
                                 <div className="prose prose-sm sm:prose-lg text-gray-600 leading-relaxed">
@@ -284,7 +301,7 @@ const AboutPage = () => {
                                     </p>
 
                                     <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200">
-                                        <div className="text-base sm:text-lg font-medium" style={{ color: '#836953' }}>Sarah Johnson</div>
+                                        <div className="text-base sm:text-lg font-medium" style={{ color: '#E91E63' }}>Sarah Johnson</div>
                                         <div className="text-gray-500 text-xs sm:text-sm">Licensed Beauty Professional & Educator</div>
                                     </div>
                                 </div>
@@ -298,12 +315,12 @@ const AboutPage = () => {
             <LocationSection lat={-7.8213449} lng={110.3656522} />
 
             {/* Our Story Section */}
-            <section ref={storyRef} className="py-12 sm:py-20 bg-gradient-to-b from-gray-50 to-white">
+            <section ref={storyRef} className="py-12 sm:py-20 bg-gradient-to-b from-pink-50 to-white">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className={`text-center mb-12 sm:mb-16 transform transition-all duration-1000 ${
                         storyInView ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                     }`}>
-                        <h2 className="text-3xl sm:text-4xl font-light mb-4" style={{ color: '#836953' }}>Our Story</h2>
+                        <h2 className="text-3xl sm:text-4xl font-light mb-4" style={{ color: '#E91E63' }}>Our Story</h2>
                         <p className="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto px-4">
                             From humble beginnings to becoming Yogyakarta's premier beauty education destination
                         </p>
@@ -338,9 +355,10 @@ const AboutPage = () => {
                 </div>
             </section>
 
-            <section ref={awardsRef} className="w-full bg-gray-50 py-12">
+            {/* Awards Section */}
+            <section ref={awardsRef} className="w-full bg-pink-50 py-12">
                 <div className="max-w-6xl mx-auto text-center px-4">
-                    <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-8" style={{ color: "#836953" }}>
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-8" style={{ color: "#E91E63" }}>
                         Our Awards & Recognition
                     </h2>
 

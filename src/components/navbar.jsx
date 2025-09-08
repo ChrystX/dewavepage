@@ -71,7 +71,7 @@ export default function Navbar() {
             <nav
                 className="fixed top-0 left-0 w-full z-40 backdrop-blur-md transition-colors duration-300"
                 style={{
-                    backgroundColor: `rgba(163, 118, 80, ${navOpacity})`,
+                    backgroundColor: `rgba(184, 59, 112, ${navOpacity})`,
                     marginTop: `${logoHeight}px`,
                 }}
             >
