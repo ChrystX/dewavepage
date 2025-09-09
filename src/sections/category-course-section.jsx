@@ -51,7 +51,7 @@ const CategoryCourseSection = () => {
 
     const scroll = (direction) => {
         if (scrollRef.current) {
-            const scrollAmount = isMobile ? 280 : 320; // Smaller scroll amount on mobile
+            const scrollAmount = isMobile ? 200 : 320; // Smaller scroll amount on mobile
             scrollRef.current.scrollBy({
                 left: direction === 'left' ? -scrollAmount : scrollAmount,
                 behavior: 'smooth'
@@ -190,153 +190,187 @@ const CategoryCourseSection = () => {
     const filteredCourses = courses.filter(c => c.categoryId === selectedCategory.id);
 
     return (
-        <div className="max-w-7xl mx-auto p-4 md:p-6">
-            {/* Categories */}
-            <div className="mb-6 md:mb-10">
-                {/* Centered heading */}
-                <div className="text-center mb-6 md:mb-8">
-                    <h1 className="font-poppins text-base sm:text-lg md:text-2xl lg:text-3xl font-semibold text-gray-900">
-                        Training Categories
-                    </h1>
-                </div>
+        <div className="w-full overflow-hidden"> {/* Add overflow-hidden wrapper */}
+            <div className="max-w-7xl mx-auto px-4 py-4 md:px-6 md:py-6">
+                {/* Categories */}
+                <div className="mb-6 md:mb-10">
+                    {/* Centered heading */}
+                    <div className="text-center mb-6 md:mb-8">
+                        <h1 className="font-poppins text-base sm:text-lg md:text-2xl lg:text-3xl font-semibold text-gray-900">
+                            Training Categories
+                        </h1>
+                    </div>
 
-                {/* Desktop Categories */}
-                <div className="hidden md:flex gap-4 lg:gap-6">
-                    {categories.map(cat => (
-                        <div key={cat.id} className="flex-1">
-                            <CategoryCard
-                                category={cat}
-                                isSelected={selectedCategory.id === cat.id}
-                                onClick={setSelectedCategory}
-                            />
-                        </div>
-                    ))}
-                </div>
+                    {/* Desktop Categories */}
+                    <div className="hidden md:flex gap-4 lg:gap-6">
+                        {categories.map(cat => (
+                            <div key={cat.id} className="flex-1">
+                                <CategoryCard
+                                    category={cat}
+                                    isSelected={selectedCategory.id === cat.id}
+                                    onClick={setSelectedCategory}
+                                />
+                            </div>
+                        ))}
+                    </div>
 
-                {/* Mobile Categories - Centered horizontal menu */}
-                <div className="md:hidden">
-                    <div className="flex justify-center">
-                        <div className="flex overflow-x-auto scrollbar-hide border-b border-gray-200 pb-2 max-w-full">
-                            {categories.map(cat => (
-                                <button
-                                    key={cat.id}
-                                    onClick={() => setSelectedCategory(cat)}
-                                    className={`flex-shrink-0 px-4 py-2 text-sm font-medium transition-colors duration-200 whitespace-nowrap relative ${
-                                        selectedCategory.id === cat.id
-                                            ? 'text-[#e91e63]'
-                                            : 'text-gray-500 hover:text-gray-700'
-                                    }`}
-                                >
-                                    {cat.name}
-                                    {selectedCategory.id === cat.id && (
-                                        <div className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-[#e91e63] rounded"></div>
-                                    )}
-                                </button>
-                            ))}
+                    {/* Mobile Categories - Centered horizontal menu */}
+                    <div className="md:hidden">
+                        <div className="flex justify-center">
+                            <div className="flex overflow-x-auto scrollbar-hide border-b border-gray-200 pb-2 max-w-full">
+                                {categories.map(cat => (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => setSelectedCategory(cat)}
+                                        className={`flex-shrink-0 px-4 py-2 text-sm font-medium transition-colors duration-200 whitespace-nowrap relative ${
+                                            selectedCategory.id === cat.id
+                                                ? 'text-[#e91e63]'
+                                                : 'text-gray-500 hover:text-gray-700'
+                                        }`}
+                                    >
+                                        {cat.name}
+                                        {selectedCategory.id === cat.id && (
+                                            <div className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-[#e91e63] rounded"></div>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Courses */}
-            <div className="border border-gray-200 rounded-lg p-4 md:p-6 bg-white shadow-sm">
-                <div className="flex flex-col lg:flex-row lg:gap-8">
-                    {/* Left side - Category Info */}
-                    <div className="lg:w-80 lg:flex-shrink-0 mb-6 lg:mb-0">
-                        <h2 className="text-lg md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">
-                            {selectedCategory.name}
-                        </h2>
-                        <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-3 md:mb-4">
-                            {selectedCategory.description}
-                        </p>
-                        <div className="space-y-1 text-sm text-gray-500">
-                            <p className="flex items-center gap-2">
-                                <span className="w-2 h-2 bg-[#e91e63] rounded-full"></span>
-                                {filteredCourses.length} Course{filteredCourses.length > 1 ? 's' : ''}
+                {/* Courses */}
+                <div className="border border-gray-200 rounded-lg p-3 md:p-6 bg-white shadow-sm overflow-hidden"> {/* Add overflow-hidden and reduce mobile padding */}
+                    <div className="flex flex-col lg:flex-row lg:gap-8">
+                        {/* Left side - Category Info */}
+                        <div className="lg:w-80 lg:flex-shrink-0 mb-6 lg:mb-0">
+                            <h2 className="text-lg md:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">
+                                {selectedCategory.name}
+                            </h2>
+                            <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-3 md:mb-4">
+                                {selectedCategory.description}
                             </p>
-                            <p className="flex items-center gap-2">
-                                <span className="w-2 h-2 bg-[#e91e63] rounded-full"></span>
-                                Professional Training
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Right side - Courses */}
-                    <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-base md:text-lg font-medium text-gray-800">Available Courses</h3>
-                            <div className="flex gap-1">
-                                <button
-                                    onClick={() => scroll('left')}
-                                    className="p-2 hover:bg-[#e91e63]/10 rounded-lg transition-colors duration-200 text-lg font-bold text-[#e91e63] hover:text-[#c2185b]"
-                                    aria-label="Scroll left"
-                                >
-                                    ‹
-                                </button>
-                                <button
-                                    onClick={() => scroll('right')}
-                                    className="p-2 hover:bg-[#e91e63]/10 rounded-lg transition-colors duration-200 text-lg font-bold text-[#e91e63] hover:text-[#c2185b]"
-                                    aria-label="Scroll right"
-                                >
-                                    ›
-                                </button>
+                            <div className="space-y-1 text-sm text-gray-500">
+                                <p className="flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-[#e91e63] rounded-full"></span>
+                                    {filteredCourses.length} Course{filteredCourses.length > 1 ? 's' : ''}
+                                </p>
+                                <p className="flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-[#e91e63] rounded-full"></span>
+                                    Professional Training
+                                </p>
                             </div>
                         </div>
 
-                        <div
-                            ref={scrollRef}
-                            className={`flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide pb-2 select-none ${
-                                isDragging ? 'cursor-grabbing' : 'cursor-grab'
-                            }`}
-                            onMouseDown={handleMouseDown}
-                            onTouchStart={handleTouchStart}
-                            onTouchMove={handleTouchMove}
-                            onTouchEnd={handleTouchEnd}
-                            style={{
-                                userSelect: 'none',
-                                WebkitUserSelect: 'none'
-                            }}
-                        >
-                            {filteredCourses.length > 0 ? (
-                                filteredCourses.map(course => (
-                                    <div
-                                        key={course.Id}
-                                        className="flex-none w-72 md:w-80"
+                        {/* Right side - Courses */}
+                        <div className="flex-1 min-w-0 overflow-hidden"> {/* Add overflow-hidden */}
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-base md:text-lg font-medium text-gray-800">Available Courses</h3>
+                                <div className="flex gap-1">
+                                    <button
+                                        onClick={() => scroll('left')}
+                                        className="p-2 hover:bg-[#e91e63]/10 rounded-lg transition-colors duration-200 text-lg font-bold text-[#e91e63] hover:text-[#c2185b]"
+                                        aria-label="Scroll left"
                                     >
-                                        <CourseCard course={course} />
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="w-full text-center py-8">
-                                    <div className="text-gray-400 mb-2">
-                                        <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                        </svg>
-                                    </div>
-                                    <p className="text-gray-500 text-sm">No courses available in this category</p>
+                                        ‹
+                                    </button>
+                                    <button
+                                        onClick={() => scroll('right')}
+                                        className="p-2 hover:bg-[#e91e63]/10 rounded-lg transition-colors duration-200 text-lg font-bold text-[#e91e63] hover:text-[#c2185b]"
+                                        aria-label="Scroll right"
+                                    >
+                                        ›
+                                    </button>
                                 </div>
-                            )}
+                            </div>
+
+                            {/* Mobile: Single column layout */}
+                            <div className="md:hidden">
+                                {filteredCourses.length > 0 ? (
+                                    <div className="space-y-4">
+                                        {filteredCourses.slice(0, 3).map(course => ( // Show only first 3 on mobile
+                                            <div key={course.Id} className="w-full">
+                                                <CourseCard course={course} />
+                                            </div>
+                                        ))}
+                                        {filteredCourses.length > 3 && (
+                                            <div className="text-center pt-2">
+                                                <button className="text-[#e91e63] text-sm font-medium hover:text-[#c2185b] transition-colors">
+                                                    View All {filteredCourses.length} Courses →
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="w-full text-center py-8">
+                                        <div className="text-gray-400 mb-2">
+                                            <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                            </svg>
+                                        </div>
+                                        <p className="text-gray-500 text-sm">No courses available in this category</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Desktop: Horizontal scroll layout */}
+                            <div className="hidden md:block">
+                                <div
+                                    ref={scrollRef}
+                                    className={`flex gap-4 overflow-x-auto scrollbar-hide pb-2 select-none ${
+                                        isDragging ? 'cursor-grabbing' : 'cursor-grab'
+                                    }`}
+                                    onMouseDown={handleMouseDown}
+                                    onTouchStart={handleTouchStart}
+                                    onTouchMove={handleTouchMove}
+                                    onTouchEnd={handleTouchEnd}
+                                    style={{
+                                        userSelect: 'none',
+                                        WebkitUserSelect: 'none'
+                                    }}
+                                >
+                                    {filteredCourses.length > 0 ? (
+                                        filteredCourses.map(course => (
+                                            <div
+                                                key={course.Id}
+                                                className="flex-none w-80" // Fixed width for desktop
+                                            >
+                                                <CourseCard course={course} />
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="w-full text-center py-8">
+                                            <div className="text-gray-400 mb-2">
+                                                <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                                </svg>
+                                            </div>
+                                            <p className="text-gray-500 text-sm">No courses available in this category</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Styles */}
-            <style jsx>{`
-                .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-                .cursor-grab {
-                    cursor: grab;
-                }
-                .cursor-grabbing {
-                    cursor: grabbing;
-                }
-            `}</style>
+                {/* Styles */}
+                <style jsx>{`
+                    .scrollbar-hide {
+                        -ms-overflow-style: none;
+                        scrollbar-width: none;
+                    }
+                    .scrollbar-hide::-webkit-scrollbar {
+                        display: none;
+                    }
+                    .cursor-grab {
+                        cursor: grab;
+                    }
+                    .cursor-grabbing {
+                        cursor: grabbing;
+                    }
+                `}</style>
+            </div>
         </div>
     );
 };
