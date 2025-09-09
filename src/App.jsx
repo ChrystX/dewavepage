@@ -67,40 +67,41 @@ const HomePage = () => {
         <>
             <header></header>
             <main
-                className="w-full min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center relative overflow-x-hidden"
+                className="w-full min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden"
                 style={{
                     backgroundImage:
                         "linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://i.imgur.com/17Pej2Z.jpeg')",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
+                    backgroundAttachment: "scroll", // Changed from fixed to scroll for mobile
                 }}
             >
-                {/* Content container */}
-                <div className="flex flex-col items-center space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 w-full max-w-5xl mx-auto text-center">
-                    {/* Main heading */}
+                {/* Content container with better mobile spacing */}
+                <div className="flex flex-col items-center justify-center space-y-6 sm:space-y-8 md:space-y-10 w-full max-w-5xl mx-auto text-center py-8 sm:py-12">
+                    {/* Main heading with improved mobile typography */}
                     <h1
-                        className="text-white text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight font-light tracking-wide px-2"
+                        className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight font-light tracking-wide px-4 sm:px-2"
                         style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                         Welcome to{" "}
-                        <span className="text-[#e91e63] font-normal block md:inline mt-2 md:mt-0">
+                        <span className="text-[#e91e63] font-normal block sm:inline mt-2 sm:mt-0">
                             deWave Academy
                         </span>
                     </h1>
 
-                    {/* Subtitle */}
-                    <p className="text-gray-100 text-sm sm:text-lg md:text-xl lg:text-xl leading-relaxed font-light opacity-90 max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto px-2">
+                    {/* Subtitle with better mobile readability */}
+                    <p className="text-gray-100 text-base sm:text-lg md:text-xl lg:text-xl leading-relaxed font-light opacity-90 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto px-4 sm:px-2">
                         Master the art of beauty with our comprehensive training
                         programs in massage, lashes, nails, makeup, and waxing
                     </p>
 
-                    {/* CTA button */}
-                    <div className="pt-4 sm:pt-6 md:pt-8 w-full flex justify-center mb-16 sm:mb-24">
-                        <button className="group flex items-center px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-[#e91e63] text-white font-semibold text-sm sm:text-base md:text-lg rounded-full shadow-2xl hover:bg-[#c2185b] hover:shadow-3xl transform hover:scale-105 transition-all duration-300 ease-out border-2 border-transparent hover:border-[#f8bbd9] max-w-[90%]">
-                            <span className="mr-3">Start Your Journey</span>
+                    {/* CTA button with improved mobile sizing */}
+                    <div className="pt-6 sm:pt-8 md:pt-10 w-full flex justify-center">
+                        <button className="group flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-4 bg-[#e91e63] text-white font-semibold text-base sm:text-lg md:text-xl rounded-full shadow-2xl hover:bg-[#c2185b] hover:shadow-3xl transform hover:scale-105 transition-all duration-300 ease-out border-2 border-transparent hover:border-[#f8bbd9] w-full max-w-xs sm:max-w-sm md:max-w-md">
+                            <span className="mr-3 text-center">Start Your Journey</span>
                             <svg
                                 ref={svgRef}
-                                className="w-4 h-4 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300"
+                                className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300 flex-shrink-0"
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2"
@@ -114,14 +115,18 @@ const HomePage = () => {
                             </svg>
                         </button>
                     </div>
-
-                    {/* Visual pink accents (hidden on mobile) */}
-                    <div className="hidden md:block absolute top-20 left-10 w-32 h-32 bg-[#e91e63] opacity-10 rounded-full blur-3xl"></div>
-                    <div className="hidden md:block absolute bottom-20 right-10 w-40 h-40 bg-[#c2185b] opacity-10 rounded-full blur-3xl"></div>
                 </div>
 
-                {/* Scroll indicator */}
-                <div className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2">
+                {/* Visual pink accents (improved positioning) */}
+                <div className="hidden lg:block absolute top-20 left-10 w-32 h-32 bg-[#e91e63] opacity-10 rounded-full blur-3xl"></div>
+                <div className="hidden lg:block absolute bottom-20 right-10 w-40 h-40 bg-[#c2185b] opacity-10 rounded-full blur-3xl"></div>
+
+                {/* Mobile-friendly decorative elements */}
+                <div className="block lg:hidden absolute top-10 left-4 w-16 h-16 bg-[#e91e63] opacity-5 rounded-full blur-2xl"></div>
+                <div className="block lg:hidden absolute bottom-32 right-4 w-20 h-20 bg-[#c2185b] opacity-5 rounded-full blur-2xl"></div>
+
+                {/* Scroll indicator with better mobile positioning */}
+                <div className="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2">
                     <div className="flex flex-col items-center space-y-2 opacity-60 hover:opacity-100 transition-opacity duration-300">
                         <span className="text-white text-xs sm:text-sm font-light">
                             Scroll to explore
