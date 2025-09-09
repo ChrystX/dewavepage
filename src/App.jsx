@@ -64,7 +64,7 @@ const HomePage = () => {
     }, []);
 
     return (
-        <>
+        <div className="overflow-x-hidden"> {/* Add this wrapper */}
             <header></header>
             <main
                 className="w-full min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden"
@@ -73,14 +73,14 @@ const HomePage = () => {
                         "linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://i.imgur.com/17Pej2Z.jpeg')",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
-                    backgroundAttachment: "scroll", // Changed from fixed to scroll for mobile
+                    backgroundAttachment: "scroll",
                 }}
             >
                 {/* Content container with better mobile spacing */}
                 <div className="flex flex-col items-center justify-center space-y-6 sm:space-y-8 md:space-y-10 w-full max-w-5xl mx-auto text-center py-8 sm:py-12">
                     {/* Main heading with improved mobile typography */}
                     <h1
-                        className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight font-light tracking-wide px-4 sm:px-2"
+                        className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight font-light tracking-wide px-2" // Reduced padding
                         style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                         Welcome to{" "}
@@ -90,15 +90,15 @@ const HomePage = () => {
                     </h1>
 
                     {/* Subtitle with better mobile readability */}
-                    <p className="text-gray-100 text-base sm:text-lg md:text-xl lg:text-xl leading-relaxed font-light opacity-90 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto px-4 sm:px-2">
+                    <p className="text-gray-100 text-base sm:text-lg md:text-xl lg:text-xl leading-relaxed font-light opacity-90 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto px-2"> {/* Reduced padding */}
                         Master the art of beauty with our comprehensive training
                         programs in massage, lashes, nails, makeup, and waxing
                     </p>
 
                     {/* CTA button with improved mobile sizing */}
-                    <div className="pt-6 sm:pt-8 md:pt-10 w-full flex justify-center">
-                        <button className="group flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-4 bg-[#e91e63] text-white font-semibold text-base sm:text-lg md:text-xl rounded-full shadow-2xl hover:bg-[#c2185b] hover:shadow-3xl transform hover:scale-105 transition-all duration-300 ease-out border-2 border-transparent hover:border-[#f8bbd9] w-full max-w-xs sm:max-w-sm md:max-w-md">
-                            <span className="mr-3 text-center">Start Your Journey</span>
+                    <div className="pt-6 sm:pt-8 md:pt-10 w-full flex justify-center px-4"> {/* Add padding to container */}
+                        <button className="group flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-4 bg-[#e91e63] text-white font-semibold text-base sm:text-lg md:text-xl rounded-full shadow-2xl hover:bg-[#c2185b] hover:shadow-3xl transform hover:scale-105 transition-all duration-300 ease-out border-2 border-transparent hover:border-[#f8bbd9] w-auto min-w-0 max-w-full"> {/* Changed width classes */}
+                            <span className="mr-3 text-center whitespace-nowrap">Start Your Journey</span> {/* Add whitespace-nowrap */}
                             <svg
                                 ref={svgRef}
                                 className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300 flex-shrink-0"
@@ -138,13 +138,15 @@ const HomePage = () => {
                 </div>
             </main>
 
-            <Affiliates />
-            <CategoryCourseSection />
-            <SweeperSection />
-            <BlogCarouselSection />
-            <TestimonialSection />
-            <SignUpSection />
-        </>
+            <div className="w-full overflow-x-hidden"> {/* Wrap other components */}
+                <Affiliates />
+                <CategoryCourseSection />
+                <SweeperSection />
+                <BlogCarouselSection />
+                <TestimonialSection />
+                <SignUpSection />
+            </div>
+        </div>
     );
 };
 
