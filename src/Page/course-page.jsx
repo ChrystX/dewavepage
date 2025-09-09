@@ -13,9 +13,25 @@ const CoursePage = () => {
     // Track scroll for navbar compatibility
     useEffect(() => {
         const handleScroll = () => setScrollY(window.scrollY);
+        const handleResize = () => {
+            // Reset visible courses when screen size changes
+            if (categories.length > 0) {
+                const newInitialVisible = {};
+                categories.forEach(category => {
+                    newInitialVisible[category.id] = window.innerWidth < 1024 ? 2 : 3;
+                });
+                setVisibleCourses(newInitialVisible);
+            }
+        };
+
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [categories]);
 
     useEffect(() => {
         fetchData();
@@ -37,10 +53,9 @@ const CoursePage = () => {
             setCategories(categoriesData);
             setCourses(coursesData);
 
-            // Initialize visible courses count for each category (3 per category)
             const initialVisible = {};
             categoriesData.forEach(category => {
-                initialVisible[category.id] = 3;
+                initialVisible[category.id] = window.innerWidth < 1024 ? 2 : 3;
             });
             setVisibleCourses(initialVisible);
 
@@ -52,8 +67,9 @@ const CoursePage = () => {
     };
 
     const loadMoreCourses = (categoryId) => {
-        const currentVisible = visibleCourses[categoryId] || 3;
-        const newVisible = currentVisible + 3;
+        const currentVisible = visibleCourses[categoryId] || (window.innerWidth < 1024 ? 2 : 3);
+        const increment = window.innerWidth < 1024 ? 2 : 3;
+        const newVisible = currentVisible + increment;
 
         setVisibleCourses(prev => ({
             ...prev,
@@ -217,7 +233,7 @@ const CoursePage = () => {
                                     {/* Courses Grid */}
                                     {visibleCoursesList.length > 0 ? (
                                         <>
-                                            <div className="grid grid-cols-3 gap-8">
+                                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                                                 {visibleCoursesList.map((course) => (
                                                     <CourseCard
                                                         key={course.id}

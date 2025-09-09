@@ -195,7 +195,9 @@ const CategoryCourseSection = () => {
             <div className="mb-6 md:mb-10">
                 {/* Centered heading */}
                 <div className="text-center mb-6 md:mb-8">
-                    <h1 className="text-xl md:text-3xl font-bold text-gray-900">Training Categories</h1>
+                    <h1 className="font-poppins text-base sm:text-lg md:text-2xl lg:text-3xl font-semibold text-gray-900">
+                        Training Categories
+                    </h1>
                 </div>
 
                 {/* Desktop Categories */}

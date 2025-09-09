@@ -15,15 +15,20 @@ const CourseCard = ({ course }) => {
             : `${mins}m`;
     };
 
-    const handleCardClick = () => {
+    const handleViewProgram = (e) => {
+        e.stopPropagation();
         navigate(`/course/${course.id}`);
     };
 
+    // Truncate title to ensure consistent length
+    const truncateTitle = (title, maxLength = 60) => {
+        if (!title) return 'Untitled Course';
+        if (title.length <= maxLength) return title;
+        return title.substring(0, maxLength).trim() + '...';
+    };
+
     return (
-        <div
-            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-all duration-200 hover:shadow-lg hover:scale-[1.02] active:scale-95"
-            onClick={handleCardClick}
-        >
+        <div className="bg-white rounded-lg overflow-hidden shadow-sm h-full flex flex-col">
             <div className="relative">
                 <img
                     src={course.image?.trim() || "/no-image.png"}
@@ -32,32 +37,46 @@ const CourseCard = ({ course }) => {
                         e.target.onerror = null;
                         e.target.src = "/no-image.png";
                     }}
-                    className="w-full h-24 sm:h-32 object-cover"
+                    className="w-full h-28 sm:h-36 object-cover"
                     loading="lazy"
                 />
             </div>
 
-            <div className="p-2 sm:p-3">
-                <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1 sm:mb-2 line-clamp-2 leading-tight">
-                    {course.title}
-                </h3>
+            <div className="p-3 flex flex-col flex-grow">
+                {/* Fixed height title container - always 2 lines */}
+                <div className="h-10 mb-2">
+                    <h3 className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 leading-5">
+                        {truncateTitle(course.title)}
+                    </h3>
+                </div>
 
-                <div className="flex items-center justify-between mb-1 sm:mb-2 text-xs text-gray-600">
+                <div className="flex items-center justify-between mb-2 text-xs text-gray-600">
                     <div className="flex items-center gap-1">
-                        <Star size={12} fill="currentColor" className="text-yellow-400" />
+                        <Star size={14} fill="currentColor" className="text-yellow-400" />
                         <span className="font-medium">
                             {course.rating ? course.rating.toFixed(1) : 'N/A'}
                         </span>
                     </div>
                     <div className="flex items-center gap-1">
-                        <Clock size={12} className="text-gray-500" />
+                        <Clock size={14} className="text-gray-500" />
                         <span>{formatDuration(course.duration)}</span>
                     </div>
                 </div>
 
-                <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
-                    {course.description || "No description available"}
-                </p>
+                {/* Fixed height description container */}
+                <div className="h-8 mb-3">
+                    <p className="text-xs text-gray-600 line-clamp-2 leading-4">
+                        {course.description || "No description available"}
+                    </p>
+                </div>
+
+                {/* Button pushed to bottom */}
+                <button
+                    onClick={handleViewProgram}
+                    className="mt-auto w-full py-2 text-sm font-medium text-pink-600 border-2 border-pink-600 rounded-full transition-all duration-300 hover:bg-pink-600 hover:text-white hover:shadow-md active:scale-95"
+                >
+                    View Program
+                </button>
             </div>
         </div>
     );
