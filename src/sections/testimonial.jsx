@@ -8,26 +8,24 @@ export default function TestimonialSection() {
     const [reviews, setReviews] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const containerRef = useRef(null);
+    const [slideWidth, setSlideWidth] = useState(0);
 
+    // Fetch reviews
     useEffect(() => {
         const fetchReviews = async () => {
             try {
                 const response = await fetch('/api/review');
                 const data = await response.json();
-
-                if (Array.isArray(data)) {
-                    setReviews(data);
-                } else {
-                    console.error('No reviews found.');
-                }
+                if (Array.isArray(data)) setReviews(data);
+                else console.error('No reviews found.');
             } catch (error) {
                 console.error('Error fetching reviews:', error);
             }
         };
-
         fetchReviews();
     }, []);
 
+    // Handle auto-slide
     useEffect(() => {
         if (reviews.length > 1) {
             const interval = setInterval(() => {
@@ -38,19 +36,31 @@ export default function TestimonialSection() {
         }
     }, [reviews]);
 
-    // Update slide position when currentIndex changes
+    // Set slide width based on container size (responsive)
     useEffect(() => {
-        if (containerRef.current && reviews.length > 0) {
-            const slideWidth = 740; // Card width (720px) + gap (20px)
-            const targetX = -currentIndex * slideWidth;
+        const updateSlideWidth = () => {
+            const container = containerRef.current?.parentElement;
+            if (container) {
+                setSlideWidth(container.offsetWidth);
+            }
+        };
 
+        updateSlideWidth();
+        window.addEventListener('resize', updateSlideWidth);
+        return () => window.removeEventListener('resize', updateSlideWidth);
+    }, []);
+
+    // Animate slide with GSAP
+    useEffect(() => {
+        if (containerRef.current && slideWidth > 0) {
+            const targetX = -currentIndex * slideWidth;
             gsap.to(containerRef.current, {
                 x: targetX,
                 duration: 0.8,
                 ease: 'power2.inOut'
             });
         }
-    }, [currentIndex, reviews]);
+    }, [currentIndex, slideWidth]);
 
     if (reviews.length === 0) {
         return (
@@ -60,7 +70,7 @@ export default function TestimonialSection() {
                         What Our Students Say
                     </h2>
                     <div className="flex justify-center">
-                        <div className="w-[720px] h-[320px] bg-white rounded-xl border border-gray-200 flex items-center justify-center">
+                        <div className="w-full max-w-[720px] h-[320px] bg-white rounded-xl border border-gray-200 flex items-center justify-center">
                             <p className="text-gray-500">Loading testimonials...</p>
                         </div>
                     </div>
@@ -77,14 +87,14 @@ export default function TestimonialSection() {
                 </h2>
 
                 <div className="flex justify-center">
-                    <div className="overflow-hidden w-[740px]">
+                    <div className="overflow-hidden w-full">
                         <div
                             ref={containerRef}
                             className="flex gap-5"
-                            style={{ width: `${reviews.length * 740}px` }}
+                            style={{ width: `${reviews.length * slideWidth}px` }}
                         >
                             {reviews.map((review, index) => (
-                                <div key={index} className="flex-shrink-0">
+                                <div key={index} className="flex-shrink-0" style={{ width: slideWidth }}>
                                     <TestimonialCard
                                         name={review.author_name}
                                         role={review.role || "Student"}

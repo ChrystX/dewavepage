@@ -2,43 +2,31 @@ import React from "react";
 import LocationMap from "./map.jsx";
 
 export default function Footer() {
-    const awards = [
-        "/20 BEST CHOICE BUSINESS 2024.png",
-        "/BEST CHOICE BUSINESS 2024.png",
-        "/BEST FRANCHISE 2022.png",
-        "/BUSINESS OPPORTUNITY 2022.jpg",
-        "/BUSINESS OPPORTUNITY 2023.png",
-        "/INDONESIA CREATIVITY & BEST LEADER AWARD 2023.png",
-        "/LOGO MOST INNOVATIVE BO 2024.png",
-        "/TOP Best Choice.png",
-        "/TOP FRANCHISE 2021.png",
-        "/TOP 20 BUSINESS OPPORTUNITY 2023.png",
-    ];
-
-    const recentAwards = awards.filter(award => {
-        const year = award.match(/(\d{4})/);
-        return year && parseInt(year[1]) >= 2022;
-    });
-
     return (
         <footer className="bg-white text-black font-sans py-6 md:py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Mobile Layout */}
-                <div className="block md:hidden">
-                    <div className="text-center mb-4">
-                        <img src="/deWave-logo.svg" alt="deWave Logo" className="h-10 mb-4" />
+                <div className="block md:hidden text-center">
+                    {/* Centered Logo */}
+                    <div className="mb-4">
+                        <img src="/deWave-logo.svg" alt="deWave Logo" className="h-10 mx-auto mb-4" />
                     </div>
 
-                    <div className="text-center mb-4">
-                        <p className="text-xs text-gray-700 mb-1">
-                            Yogyakarta, Indonesia
-                        </p>
-                        <a href="tel:+6282242752668" className="text-xs text-gray-900 hover:text-yellow-600">
+                    {/* Address */}
+                    <div className="text-xs text-gray-700 mb-2">
+                        Jl. Mangkuyudan No.45, Mantrijeron,<br />
+                        Kota Yogyakarta, DIY 55143, Indonesia
+                    </div>
+
+                    {/* Contact */}
+                    <div className="text-xs text-gray-900 mb-4">
+                        <a href="tel:+6282242752668" className="hover:text-yellow-600">
                             +62 822-4275-2668
                         </a>
                     </div>
 
+                    {/* Social Media */}
                     <div className="flex justify-center space-x-3 mb-4">
                         {[
                             { href: "#", src: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Facebook_icon.svg", label: "Facebook" },
@@ -56,7 +44,8 @@ export default function Footer() {
                         ))}
                     </div>
 
-                    <div className="text-center pt-3 border-t border-black/20">
+                    {/* Copyright */}
+                    <div className="pt-3 border-t border-black/20">
                         <p className="text-xs text-gray-700">
                             © {new Date().getFullYear()} deWave Academy
                         </p>
@@ -77,17 +66,6 @@ export default function Footer() {
                             <p className="text-sm text-gray-700 mb-4">
                                 Phone: <a href="tel:+6282242752668" className="hover:text-yellow-600 transition-colors">+62 822-4275-2668</a>
                             </p>
-
-                            <div className="flex flex-wrap gap-1.5">
-                                {recentAwards.slice(0, 4).map((award, i) => (
-                                    <img
-                                        key={i}
-                                        src={award}
-                                        alt={`Award ${i + 1}`}
-                                        className="h-8 w-auto opacity-80 hover:opacity-100 transition-opacity"
-                                    />
-                                ))}
-                            </div>
                         </div>
 
                         {/* Navigation */}

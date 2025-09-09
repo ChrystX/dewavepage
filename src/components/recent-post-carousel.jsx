@@ -1,98 +1,212 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
-import BlogCard from "./blog-card.jsx";
+import CarouselBlogCard from "./carousel-blog-card.jsx";
 
 const RecentPostsCarousel = ({ blogs }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [visibleCount, setVisibleCount] = useState(5);
+    const [containerWidth, setContainerWidth] = useState(0);
     const navigate = useNavigate();
-    const visibleCount = 5;
+
+    // Responsive configuration
+    const getResponsiveConfig = useCallback(() => {
+        const width = window.innerWidth;
+
+        if (width < 480) {
+            // Mobile phones - show 1.2 cards
+            return {
+                visibleCount: 1.2,
+                cardWidth: Math.min(280, width - 32), // Account for padding
+                gap: 16
+            };
+        } else if (width < 640) {
+            // Large mobile phones - show 1.5 cards
+            return {
+                visibleCount: 1.5,
+                cardWidth: 260,
+                gap: 16
+            };
+        } else if (width < 768) {
+            // Small tablets - show 2.3 cards
+            return {
+                visibleCount: 2.3,
+                cardWidth: 240,
+                gap: 16
+            };
+        } else if (width < 1024) {
+            // Tablets - show 3 cards
+            return {
+                visibleCount: 3,
+                cardWidth: 280,
+                gap: 20
+            };
+        } else if (width < 1280) {
+            // Small desktop - show 4 cards
+            return {
+                visibleCount: 4,
+                cardWidth: 300,
+                gap: 20
+            };
+        } else {
+            // Large desktop - show 4-5 cards
+            return {
+                visibleCount: 4.5,
+                cardWidth: 320,
+                gap: 24
+            };
+        }
+    }, []);
+
+    const updateLayout = useCallback(() => {
+        const config = getResponsiveConfig();
+        setVisibleCount(config.visibleCount);
+
+        // Calculate container width based on viewport
+        const width = window.innerWidth;
+        setContainerWidth(width < 640 ? width - 32 : width - 64); // Account for padding
+    }, [getResponsiveConfig]);
+
+    // Handle window resize
+    useEffect(() => {
+        updateLayout();
+        window.addEventListener('resize', updateLayout);
+        return () => window.removeEventListener('resize', updateLayout);
+    }, [updateLayout]);
+
+    // Calculate max index and card dimensions
+    const config = getResponsiveConfig();
+    const cardWidth = Math.floor((containerWidth - (config.gap * (Math.floor(config.visibleCount) - 1))) / config.visibleCount);
+    const maxIndex = Math.max(0, blogs.length - Math.floor(config.visibleCount));
 
     // Auto-rotate functionality
     useEffect(() => {
-        if (blogs.length <= visibleCount) return;
+        if (blogs.length <= Math.floor(config.visibleCount)) return;
 
         const interval = setInterval(() => {
-            setCurrentIndex((prev) =>
-                prev + 1 >= blogs.length - visibleCount + 1 ? 0 : prev + 1
-            );
-        }, 3000);
+            setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+        }, 4000);
 
         return () => clearInterval(interval);
-    }, [blogs.length, visibleCount]);
+    }, [blogs.length, config.visibleCount, maxIndex]);
 
     const nextSlide = () => {
-        setCurrentIndex((prev) =>
-            prev + 1 >= blogs.length - visibleCount + 1 ? 0 : prev + 1
-        );
+        setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     };
 
     const prevSlide = () => {
-        setCurrentIndex((prev) =>
-            prev === 0 ? Math.max(0, blogs.length - visibleCount) : prev - 1
-        );
+        setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    };
+
+    const goToSlide = (index) => {
+        setCurrentIndex(Math.min(index, maxIndex));
     };
 
     const handleBlogClick = (blog) => {
-        // Navigate to the blog detail page
         navigate(`/blog/${blog.id}`);
     };
 
     if (blogs.length === 0) return null;
 
+    const showControls = blogs.length > Math.floor(config.visibleCount);
+    const slideDistance = currentIndex * (cardWidth + config.gap);
+
     return (
-        <section className="mb-8">
-            <div className="flex items-center justify-between mb-4">
+        <section className="mb-8 w-full">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6 px-4 sm:px-8">
                 <div>
-                    <h2 className="text-xl font-bold text-gray-900">Latest Stories</h2>
-                    <p className="text-gray-600 text-sm">Fresh content just published</p>
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
+                        Latest Stories
+                    </h2>
+                    <p className="text-gray-600 text-sm sm:text-base">
+                        Fresh content just published
+                    </p>
                 </div>
-                {blogs.length > visibleCount && (
-                    <div className="flex gap-1">
+
+                {/* Navigation controls */}
+                {showControls && (
+                    <div className="hidden sm:flex gap-2">
                         <button
                             onClick={prevSlide}
-                            className="p-1.5 rounded-full border border-gray-200 hover:bg-[#836953] hover:text-white transition-all duration-300"
+                            disabled={currentIndex === 0}
+                            className="p-2.5 rounded-full border border-gray-200 hover:bg-[#836953] hover:text-white hover:border-[#836953] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             aria-label="Previous slide"
                         >
-                            <ChevronLeft className="w-3 h-3" />
+                            <ChevronLeft className="w-4 h-4" />
                         </button>
                         <button
                             onClick={nextSlide}
-                            className="p-1.5 rounded-full border border-gray-200 hover:bg-[#836953] hover:text-white transition-all duration-300"
+                            disabled={currentIndex >= maxIndex}
+                            className="p-2.5 rounded-full border border-gray-200 hover:bg-[#836953] hover:text-white hover:border-[#836953] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             aria-label="Next slide"
                         >
-                            <ChevronRight className="w-3 h-3" />
+                            <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>
                 )}
             </div>
 
-            <div className="overflow-hidden">
-                <div
-                    className="flex gap-3 transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${currentIndex * (200 + 12)}px)` }}
-                >
-                    {blogs.map((blog, index) => (
-                        <BlogCard
-                            key={blog.id}
-                            blog={blog}
-                            index={index}
-                            size="small"
-                            onClick={handleBlogClick}
-                        />
-                    ))}
+            {/* Carousel container */}
+            <div className="relative">
+                <div className="overflow-hidden px-4 sm:px-8">
+                    <div
+                        className="flex transition-transform duration-500 ease-in-out"
+                        style={{
+                            transform: `translateX(-${slideDistance}px)`,
+                            gap: `${config.gap}px`
+                        }}
+                    >
+                        {blogs.map((blog, index) => (
+                            <div
+                                key={blog.id}
+                                style={{
+                                    minWidth: `${cardWidth}px`,
+                                    width: `${cardWidth}px`
+                                }}
+                            >
+                                <CarouselBlogCard
+                                    blog={blog}
+                                    index={index}
+                                    onClick={handleBlogClick}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
+
+                {/* Mobile navigation controls */}
+                {showControls && (
+                    <div className="flex sm:hidden justify-center gap-3 mt-4">
+                        <button
+                            onClick={prevSlide}
+                            className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-[#836953] hover:text-white transition-all duration-300 touch-manipulation"
+                            aria-label="Previous slide"
+                        >
+                            <ChevronLeft className="w-5 h-5" />
+                        </button>
+                        <button
+                            onClick={nextSlide}
+                            className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-[#836953] hover:text-white transition-all duration-300 touch-manipulation"
+                            aria-label="Next slide"
+                        >
+                            <ChevronRight className="w-5 h-5" />
+                        </button>
+                    </div>
+                )}
             </div>
 
-            {/* Optional: Dots indicator */}
-            {blogs.length > visibleCount && (
-                <div className="flex justify-center gap-1 mt-4">
-                    {Array.from({ length: Math.ceil(blogs.length - visibleCount + 1) }, (_, i) => (
+            {/* Progress indicators */}
+            {showControls && (
+                <div className="flex justify-center gap-2 mt-6">
+                    {Array.from({ length: maxIndex + 1 }, (_, i) => (
                         <button
                             key={i}
-                            onClick={() => setCurrentIndex(i)}
-                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                currentIndex === i ? 'bg-[#836953]' : 'bg-gray-300 hover:bg-gray-400'
+                            onClick={() => goToSlide(i)}
+                            className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 touch-manipulation ${
+                                currentIndex === i
+                                    ? 'bg-[#836953] scale-125'
+                                    : 'bg-gray-300 hover:bg-gray-400'
                             }`}
                             aria-label={`Go to slide ${i + 1}`}
                         />

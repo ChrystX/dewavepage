@@ -12,18 +12,10 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Close mobile menu when route changes
-    useEffect(() => {
-        setIsMobileMenuOpen(false);
-    }, [location.pathname]);
+    useEffect(() => setIsMobileMenuOpen(false), [location.pathname]);
 
-    // Prevent body scroll when mobile menu is open
     useEffect(() => {
-        if (isMobileMenuOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
+        document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'unset';
         return () => {
             document.body.style.overflow = 'unset';
         };
@@ -38,9 +30,7 @@ export default function Navbar() {
 
     const isActive = (path) => location.pathname === path;
 
-    const toggleMobileMenu = () => {
-        setIsMobileMenuOpen(!isMobileMenuOpen);
-    };
+    const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
     const menuItems = [
         { path: '/', label: 'Home' },
@@ -51,9 +41,9 @@ export default function Navbar() {
 
     return (
         <>
-            {/* Logo */}
+            {/* Logo (Desktop Hidden for Mobile) */}
             <div
-                className="w-full bg-white z-50 flex justify-center items-center fixed top-0 left-0 transition-all duration-300 ease-in-out"
+                className="w-full z-50 flex justify-center items-center fixed top-0 left-0 transition-all duration-300 ease-in-out bg-white"
                 style={{
                     height: `${logoHeight}px`,
                     opacity: logoOpacity,
@@ -69,34 +59,37 @@ export default function Navbar() {
 
             {/* Navigation */}
             <nav
-                className="fixed top-0 left-0 w-full z-40 backdrop-blur-md transition-colors duration-300"
+                className="fixed top-0 left-0 w-full z-40 transition-colors duration-300 flex items-center"
                 style={{
-                    backgroundColor: `rgba(184, 59, 112, ${navOpacity})`,
+                    backgroundColor: `rgba(255, 255, 255, ${0.2 + 0.75 * navOpacity})`,
                     marginTop: `${logoHeight}px`,
                 }}
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                    {/* Desktop Menu */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2">
-                        <div className="space-x-8 text-white hidden md:flex">
-                            {menuItems.map((item) => (
-                                <Link
-                                    key={item.path}
-                                    to={item.path}
-                                    className={`hover:text-gray-300 nav-text transition-colors duration-200 ${
-                                        isActive(item.path) ? 'underline' : ''
-                                    }`}
-                                >
-                                    {item.label}
-                                </Link>
-                            ))}
-                        </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between w-full">
+                    {/* Mobile Logo */}
+                    <div className="md:hidden flex items-center">
+                        <img src="/deWave-logo.svg" alt="Logo" className="h-6" />
                     </div>
 
-                    {/* Mobile Hamburger Button */}
+                    {/* Desktop Menu */}
+                    <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-8 text-gray-900">
+                        {menuItems.map((item) => (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className={`hover:text-gray-600 nav-text transition-colors duration-200 ${
+                                    isActive(item.path) ? 'underline' : ''
+                                }`}
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
+                    </div>
+
+                    {/* Mobile Hamburger */}
                     <button
                         onClick={toggleMobileMenu}
-                        className="md:hidden ml-auto p-2 text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent rounded-md"
+                        className="md:hidden p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-800 rounded-md"
                         aria-label="Toggle mobile menu"
                     >
                         <div className="w-6 h-6 flex flex-col justify-center space-y-1">
@@ -120,59 +113,27 @@ export default function Navbar() {
                 </div>
             </nav>
 
-            {/* Mobile Menu Overlay */}
-            <div
-                className={`fixed inset-0 z-50 md:hidden transition-opacity duration-300 ease-in-out ${
-                    isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                }`}
-            >
-                {/* Backdrop */}
+            {/* Mobile Menu Panel Only */}
+            <div className="md:hidden">
                 <div
-                    className="absolute inset-0 bg-black bg-opacity-50"
-                    onClick={toggleMobileMenu}
-                />
-
-                {/* Menu Panel */}
-                <div
-                    className={`absolute right-0 top-0 h-full w-80 max-w-sm bg-white shadow-xl transform transition-transform duration-300 ease-in-out ${
+                    className={`fixed top-0 right-0 h-full w-80 max-w-sm shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
                         isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
                     }`}
-                    style={{ marginTop: `${logoHeight}px` }}
+                    style={{ backgroundColor: '#E4007C', marginTop: `${logoHeight}px` }}
                 >
-                    <div className="flex flex-col h-full">
-                        {/* Header */}
-                        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                            <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
-                            <button
-                                onClick={toggleMobileMenu}
-                                className="p-2 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 rounded-md"
-                                aria-label="Close menu"
+                    <div className="flex flex-col h-full p-6 space-y-6 text-white">
+                        {menuItems.map((item) => (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className={`block text-lg font-semibold px-4 py-3 rounded-md transition-colors duration-200 hover:bg-pink-700 ${
+                                    isActive(item.path) ? 'bg-pink-800' : ''
+                                }`}
+                                onClick={() => setIsMobileMenuOpen(false)}
                             >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        {/* Menu Items */}
-                        <div className="flex-1 px-6 py-4">
-                            <nav className="space-y-4">
-                                {menuItems.map((item) => (
-                                    <Link
-                                        key={item.path}
-                                        to={item.path}
-                                        className={`block px-4 py-3 rounded-lg text-lg font-medium transition-colors duration-200 ${
-                                            isActive(item.path)
-                                                ? 'bg-amber-100 text-amber-900 border-l-4 border-amber-600'
-                                                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                                        }`}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                    >
-                                        {item.label}
-                                    </Link>
-                                ))}
-                            </nav>
-                        </div>
+                                {item.label}
+                            </Link>
+                        ))}
                     </div>
                 </div>
             </div>
