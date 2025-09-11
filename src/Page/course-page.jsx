@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, BookOpen, Users, Award } from 'lucide-react';
 import CourseCard from "../components/course-card.jsx";
+import useCourseData from "../hooks/useCourseData.js";
+import useCategories from "../hooks/useCategories.js";
 
 const CoursePage = () => {
-    const [categories, setCategories] = useState([]);
-    const [courses, setCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [visibleCourses, setVisibleCourses] = useState({});
     const [scrollY, setScrollY] = useState(0);
+    const { categories, loading: categoriesLoading, error: categoriesError, refetch: refetchCategories } = useCategories();
+    const { courses, loading: coursesLoading, error: coursesError, refetch: refetchCourses } = useCourseData();
+
+    const loading = coursesLoading || categoriesLoading;
+    const error = coursesError || categoriesError;
+    const refetch = () => {
+        refetchCourses();
+        refetchCategories();
+    };
 
     // Track scroll for navbar compatibility
     useEffect(() => {
@@ -34,37 +41,7 @@ const CoursePage = () => {
     }, [categories]);
 
     useEffect(() => {
-        fetchData();
     }, []);
-
-    const fetchData = async () => {
-        try {
-            const [categoriesResponse, coursesResponse] = await Promise.all([
-                fetch('https://dewavefreeapi20250731173800.azurewebsites.net/api/categories'),
-                fetch('https://dewavefreeapi20250731173800.azurewebsites.net/api/courses')
-            ]);
-
-            if (!categoriesResponse.ok) throw new Error('Failed to fetch categories');
-            if (!coursesResponse.ok) throw new Error('Failed to fetch courses');
-
-            const categoriesData = await categoriesResponse.json();
-            const coursesData = await coursesResponse.json();
-
-            setCategories(categoriesData);
-            setCourses(coursesData);
-
-            const initialVisible = {};
-            categoriesData.forEach(category => {
-                initialVisible[category.id] = window.innerWidth < 1024 ? 2 : 3;
-            });
-            setVisibleCourses(initialVisible);
-
-            setLoading(false);
-        } catch (err) {
-            setError(err.message);
-            setLoading(false);
-        }
-    };
 
     const loadMoreCourses = (categoryId) => {
         const currentVisible = visibleCourses[categoryId] || (window.innerWidth < 1024 ? 2 : 3);

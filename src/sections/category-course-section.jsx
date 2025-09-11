@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CategoryCard from '../components/category-card.jsx';
 import CourseCard from '../components/course-card.jsx';
+import useCourseData from "../hooks/useCourseData.js";
 
 const categories = [
     { id: 1, name: 'Massage', description: 'Pelatihan Pijat', image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&h=300&fit=crop' },
@@ -12,10 +13,8 @@ const categories = [
 
 const CategoryCourseSection = () => {
     const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-    const [courses, setCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
+    const { courses, loading, error } = useCourseData();
 
     const scrollRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -24,7 +23,6 @@ const CategoryCourseSection = () => {
     const animationRef = useRef(null);
 
     useEffect(() => {
-        fetchCourses();
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
@@ -32,21 +30,6 @@ const CategoryCourseSection = () => {
 
     const checkMobile = () => {
         setIsMobile(window.innerWidth < 768);
-    };
-
-    const fetchCourses = async () => {
-        try {
-            setLoading(true);
-            const response = await fetch('https://dewavefreeapiapi.azure-api.net/api/courses');
-            if (!response.ok) throw new Error('Failed to fetch courses');
-            const data = await response.json();
-            setCourses(data);
-        } catch (err) {
-            setError(err.message);
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
     };
 
     const scroll = (direction) => {

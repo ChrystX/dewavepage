@@ -1,12 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
-import CourseModal from "../admin_component/admin_course_modal.jsx";
-import CoursesTable from "../admin_component/admin_course_table.jsx";
-import CourseFilters from "../admin_component/admin_course_filters.jsx";
-import StatsCards from "../admin_component/admin_course_statscard.jsx";
-import DashboardHeader from "../admin_component/admin_course_header.jsx";
-import FaqModal from "../admin_component/faq_modal.jsx";
-import CourseDetailModal from "../admin_component/course_detail_modal.jsx";
-import CourseSectionModal from "../admin_component/course_section_modal.jsx"; // Import the new component
+import CourseModal from "../admin_component/course/admin_course_modal.jsx";
+import CoursesTable from "../admin_component/course/admin_course_table.jsx";
+import CourseFilters from "../admin_component/course/admin_course_filters.jsx";
+import StatsCards from "../admin_component/course/admin_course_statscard.jsx";
+import DashboardHeader from "../admin_component/course/admin_course_header.jsx";
+import FaqModal from "../admin_component/course/faq_modal.jsx";
+import CourseDetailModal from "../admin_component/course/course_detail_modal.jsx";
+import CourseSectionModal from "../admin_component/course/course_section_modal.jsx";
+import CoursePreviewModal from "../admin_component/course/course_preview.jsx";
 
 const AdminCourseDashboard = () => {
     const [courses, setCourses] = useState([]);
@@ -45,6 +46,10 @@ const AdminCourseDashboard = () => {
     const [courseSectionModalOpen, setCourseSectionModalOpen] = useState(false);
     const [selectedCourseSectionId, setSelectedCourseSectionId] = useState(null);
 
+    // NEW: Course Preview Modal states
+    const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+    const [previewCourse, setPreviewCourse] = useState(null);
+
     const closeFaqModal = () => {
         setFaqModalOpen(false);
         setFaqFormData({ id:null, question:'', answer:'', sortOrder:0, courseId:null });
@@ -70,6 +75,17 @@ const AdminCourseDashboard = () => {
     const closeCourseSectionModal = () => {
         setCourseSectionModalOpen(false);
         setSelectedCourseSectionId(null);
+    };
+
+    // NEW: CoursePreview Modal functions
+    const openCoursePreview = (course) => {
+        setPreviewCourse(course);
+        setIsPreviewModalOpen(true);
+    };
+
+    const closeCoursePreview = () => {
+        setIsPreviewModalOpen(false);
+        setPreviewCourse(null);
     };
 
     const COURSES_API_URL = 'https://dewavefreeapi20250731173800.azurewebsites.net/api/courses';
@@ -327,7 +343,7 @@ const AdminCourseDashboard = () => {
                 <div className="-mx-4 sm:-mx-6 lg:-mx-22">
                     <CoursesTable
                         courses={filteredCourses}
-                        onView={openModal}
+                        onView={openCoursePreview} // CHANGED: Now opens preview modal instead of edit modal
                         onEdit={openModal}
                         onDelete={deleteCourse}
                         onFaq={(course) => openFaqModal('create', null, course.id)}
@@ -367,9 +383,16 @@ const AdminCourseDashboard = () => {
                     onClose={closeCourseSectionModal}
                     courseId={selectedCourseSectionId}
                 />
+                {/* NEW: Course Preview Modal */}
+                <CoursePreviewModal
+                    isOpen={isPreviewModalOpen}
+                    onClose={closeCoursePreview}
+                    course={previewCourse}
+                    courseId={previewCourse?.id}
+                />
             </div>
         </>
-);
+    );
 };
 
 export default AdminCourseDashboard;

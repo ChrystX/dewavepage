@@ -1,13 +1,14 @@
 import {useEffect, useState} from "react";
 import RecentPostsCarousel from "../components/recent-post-carousel.jsx";
 import BlogCard from "../components/blog-card.jsx";
+import {useBlogData} from "../hooks/useBlogData.js";
 import Pagination from "../components/blog-pagination.jsx";
 import {BookOpen, Users, Award} from 'lucide-react';
 
 const BlogPage = () => {
-    const [blogs, setBlogs] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    // Replace the old state and fetch logic with the custom hook
+    const { blogs, loading, error, hasData } = useBlogData();
+
     const [currentPage, setCurrentPage] = useState(1);
     const [scrollY, setScrollY] = useState(0);
     const blogsPerPage = 12;
@@ -19,45 +20,6 @@ const BlogPage = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const response = await fetch('https://dewavefreeapi20250731173800.azurewebsites.net/api/blogs');
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch blogs');
-                }
-
-                const data = await response.json();
-                setBlogs(data);
-            } catch (err) {
-                setError(err.message);
-                // Fallback sample data for demo
-                const sampleBlogs = [];
-                for (let i = 1; i <= 25; i++) {
-                    sampleBlogs.push({
-                        id: i,
-                        title: `Blog Post ${i}: ${['React Fundamentals', 'CSS Mastery', 'JavaScript Tips', 'UI/UX Design', 'Backend Development'][i % 5]}`,
-                        slug: `blog-post-${i}`,
-                        authorId: (i % 4) + 1,
-                        summary: `This is a comprehensive guide about ${['React development', 'CSS styling techniques', 'JavaScript best practices', 'design principles', 'server-side programming'][i % 5]}. Learn the essential concepts and practical applications.`,
-                        thumbnailUrl: "",
-                        categoryId: (i % 3) + 1,
-                        status: i % 10 === 0 ? "draft" : "published",
-                        createdAt: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString(),
-                        updatedAt: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString(),
-                        publishedAt: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString()
-                    });
-                }
-                setBlogs(sampleBlogs);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchBlogs();
-    }, []);
-
     // Pagination logic
     const totalPages = Math.ceil(blogs.length / blogsPerPage);
     const startIndex = (currentPage - 1) * blogsPerPage;
@@ -65,13 +27,6 @@ const BlogPage = () => {
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
-        // Calculate navbar height for smooth scroll
-        const maxLogoScroll = 100;
-        const logoHeight = Math.max(0, 48 - scrollY / 2);
-        const navbarHeight = 80;
-        const totalNavbarHeight = logoHeight + navbarHeight;
-
-        // Scroll to top accounting for navbar
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
@@ -79,7 +34,6 @@ const BlogPage = () => {
     };
 
     // Calculate navbar height based on scroll position (same logic as navbar)
-    const maxLogoScroll = 100;
     const logoHeight = Math.max(0, 48 - scrollY / 2);
     const navbarHeight = 80; // 20 * 4 = 80px (h-20)
     const totalNavbarHeight = logoHeight + navbarHeight;
@@ -162,13 +116,13 @@ const BlogPage = () => {
                 {error && (
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-6">
                         <p className="text-yellow-800 text-sm">
-                            Could not fetch blogs from API. Showing sample data instead.
+                            Could not fetch blogs from API: {error}
                         </p>
                     </div>
                 )}
 
                 {/* Recent Posts Carousel */}
-                <RecentPostsCarousel blogs={blogs.slice(0, 8)} />
+                {hasData && <RecentPostsCarousel blogs={blogs.slice(0, 8)} />}
 
                 {/* All Posts with Pagination */}
                 <section>
@@ -179,12 +133,12 @@ const BlogPage = () => {
                         <div className="relative mx-auto w-20 h-0.5 bg-gradient-to-r from-transparent via-[#e91e63] to-transparent rounded-full mt-3"></div>
                     </div>
 
-                    {blogs.length === 0 ? (
+                    {!hasData && !loading ? (
                         <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
                             <BookOpen size={32} className="text-gray-400 mx-auto mb-4" />
                             <p className="text-gray-500">No stories available</p>
                         </div>
-                    ) : (
+                    ) : hasData ? (
                         <>
                             {/* Adjusted grid */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -199,7 +153,7 @@ const BlogPage = () => {
                                 onPageChange={handlePageChange}
                             />
                         </>
-                    )}
+                    ) : null}
                 </section>
             </main>
 

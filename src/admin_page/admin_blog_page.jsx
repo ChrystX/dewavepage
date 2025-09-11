@@ -1,11 +1,11 @@
 import {useEffect, useMemo, useState} from "react";
-import BlogDashboardHeader from "../admin_component/admin_blog_header.jsx";
-import BlogStatsCards from "../admin_component/admin_blog_statscard.jsx";
-import BlogFilters from "../admin_component/admin_blog_filter.jsx";
-import BlogTable from "../admin_component/admin_blog_table.jsx";
-import BlogModal from "../admin_component/admin_blog_modal.jsx";
-import BlogDetailModal from "../admin_component/admin_blog_detail_modal.jsx";
-import BlogPreviewModal from "../admin_component/admin_blog_preview_modal.jsx"; // Add this import
+import BlogDashboardHeader from "../admin_component/blog/admin_blog_header.jsx";
+import BlogStatsCards from "../admin_component/blog/admin_blog_statscard.jsx";
+import BlogFilters from "../admin_component/blog/admin_blog_filter.jsx";
+import BlogTable from "../admin_component/blog/admin_blog_table.jsx";
+import BlogModal from "../admin_component/blog/admin_blog_modal.jsx";
+import BlogDetailModal from "../admin_component/blog/admin_blog_detail_modal.jsx";
+import BlogPreviewModal from "../admin_component/blog/admin_blog_preview_modal.jsx"; // Add this import
 
 const AdminBlogDashboard = () => {
     const [blogs, setBlogs] = useState([]);

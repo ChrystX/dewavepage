@@ -1,33 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SweeperContainer from "../components/sweeper-container.jsx";
+import useCourseData from "../hooks/useCourseData.js";
 
 const SweeperSection = () => {
-    const [courses, setCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { courses, loading, error, refetch} = useCourseData();
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchCourses();
     }, []);
-
-    const fetchCourses = async () => {
-        try {
-            setLoading(true);
-            const response = await fetch(
-                "https://dewavefreeapiapi.azure-api.net/api/courses"
-            );
-            if (!response.ok) throw new Error("Failed to fetch courses");
-            const data = await response.json();
-            setCourses(data);
-        } catch (err) {
-            setError(err.message);
-            console.error("Error fetching courses:", err);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     if (loading) {
         return (
@@ -48,7 +29,7 @@ const SweeperSection = () => {
                 <div className="max-w-6xl mx-auto text-center">
                     <p className="text-red-600">Error: {error}</p>
                     <button
-                        onClick={fetchCourses}
+                        onClick={refetch}
                         className="mt-4 px-4 py-2 bg-[#e91e63] text-white text-sm rounded-lg hover:bg-[#c2185b] transition-colors"
                     >
                         Try Again

@@ -1,31 +1,11 @@
 import { useState, useEffect } from "react";
 import RecentPostsCarousel from "../components/recent-post-carousel.jsx";
 import RecentPostsGrid from "../components/recent-post-grid.jsx";
+import { useRecentBlogs } from "../hooks/useBlogData.js";
 
 const BlogCarouselSection = () => {
-    const [blogs, setBlogs] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { blogs, loading, error, isEmpty } = useRecentBlogs(8); // use your custom hook
     const [isMobile, setIsMobile] = useState(window.innerWidth < 640); // sm breakpoint
-
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const response = await fetch(
-                    "https://dewavefreeapi20250731173800.azurewebsites.net/api/blogs"
-                );
-                if (!response.ok) throw new Error("Failed to fetch blogs");
-                const data = await response.json();
-                setBlogs(data.slice(0, 8)); // top 8
-            } catch (err) {
-                setError(err.message);
-                setBlogs([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchBlogs();
-    }, []);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -35,7 +15,7 @@ const BlogCarouselSection = () => {
 
     const handleBlogClick = (blog) => {
         if (blog.showAll) {
-            window.location.href = '/blog';
+            window.location.href = "/blog";
         } else if (blog.id) {
             window.location.href = `/blog/${blog.id}`;
         }
@@ -109,7 +89,7 @@ const BlogCarouselSection = () => {
                                     </svg>
                                 </a>
                             </div>
-                        ) : blogs.length > 0 ? (
+                        ) : !isEmpty ? (
                             <div className="w-full">
                                 {isMobile ? (
                                     <RecentPostsGrid blogs={blogs} onBlogClick={handleBlogClick} />

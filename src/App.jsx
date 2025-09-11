@@ -1,9 +1,8 @@
 import './App.css'
 import {BrowserRouter as Router, Routes, Route, useLocation} from 'react-router-dom'; // Add this import
 import Navbar from "./components/navbar.jsx";
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef} from 'react';
 import { gsap } from 'gsap';
-import CoursesSection from "./sections/course_sections.jsx";
 import Affiliates from "./sections/trustedsection.jsx";
 import SignUpSection from "./sections/signupsection.jsx";
 import TestimonialSection from "./sections/testimonial.jsx";
@@ -21,6 +20,12 @@ import AdminCourseDashboard from "./admin_page/admin_course_page.jsx";
 import AdminCategoryDashboard from "./admin_page/category_page.jsx";
 import Test from "./Page/test.jsx";
 import AdminBlogDashboard from "./admin_page/admin_blog_page.jsx";
+import AdminNavbar from "./admin_component/navbar/AdminNavbar.jsx";
+import HomeDashboard from "./admin_page/admin_dashboard.jsx";
+import AdminLogin from "./admin_component/login/AdminLogin.jsx";
+import ProtectedRoute from "./admin_component/login/ProtectedRoute.jsx";
+import {AuthProvider} from "./contexts/AuthContext.jsx";
+import AdminLayout from "./components/AdminLayout.jsx";
 
 const NotFoundPage = () => {
     return (
@@ -70,37 +75,45 @@ const HomePage = () => {
                 className="w-full min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden"
                 style={{
                     backgroundImage:
-                        "linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://i.imgur.com/17Pej2Z.jpeg')",
+                        "linear-gradient(to bottom, rgba(0,0,0,0.75), rgba(0,0,0,0.8)), url('https://i.imgur.com/17Pej2Z.jpeg')",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundAttachment: "scroll",
+                    backdropFilter: "blur(12px)",
+                    WebkitBackdropFilter: "blur(12px)", // Safari support
                 }}
             >
+
+
                 {/* Content container with better mobile spacing */}
-                <div className="flex flex-col items-center justify-center space-y-6 sm:space-y-8 md:space-y-10 w-full max-w-5xl mx-auto text-center py-8 sm:py-12">
+                <div className="flex flex-col items-center justify-center space-y-6 sm:space-y-8 md:space-y-10 w-full max-w-5xl mx-auto text-center py-8 sm:py-12 relative z-10">
                     {/* Main heading with improved mobile typography */}
                     <h1
-                        className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight font-light tracking-wide px-2" // Reduced padding
-                        style={{ fontFamily: "Poppins, sans-serif" }}
+                        className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight font-light tracking-wide px-2"
+                        style={{
+                            fontFamily: "Poppins, sans-serif",
+                            textShadow: "2px 2px 8px rgba(0,0,0,0.8)"
+                        }}
                     >
                         Welcome to{" "}
                         <span className="text-[#e91e63] font-normal block sm:inline mt-2 sm:mt-0">
-                            deWave Academy
-                        </span>
+                deWave Academy
+            </span>
                     </h1>
 
                     {/* Subtitle with better mobile readability */}
-                    <p className="text-gray-100 text-base sm:text-lg md:text-xl lg:text-xl leading-relaxed font-light opacity-90 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto px-2"> {/* Reduced padding */}
+                    <p className="text-gray-100 text-base sm:text-lg md:text-xl lg:text-xl leading-relaxed font-light max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto px-2"
+                       style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.9)" }}
+                    >
                         Master the art of beauty with our comprehensive training
                         programs in massage, lashes, nails, makeup, and waxing
                     </p>
 
                     {/* CTA button with improved mobile sizing */}
-                    <div className="pt-6 sm:pt-8 md:pt-10 w-full flex justify-center px-4"> {/* Add padding to container */}
-                        <button className="group flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-4 bg-[#e91e63] text-white font-semibold text-base sm:text-lg md:text-xl rounded-full shadow-2xl hover:bg-[#c2185b] hover:shadow-3xl transform hover:scale-105 transition-all duration-300 ease-out border-2 border-transparent hover:border-[#f8bbd9] w-auto min-w-0 max-w-full"> {/* Changed width classes */}
-                            <span className="mr-3 text-center whitespace-nowrap">Start Your Journey</span> {/* Add whitespace-nowrap */}
+                    <div className="pt-6 sm:pt-8 md:pt-10 w-full flex justify-center px-4">
+                        <button className="group flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-4 bg-[#e91e63] text-white font-semibold text-base sm:text-lg md:text-xl rounded-full shadow-2xl hover:bg-[#c2185b] hover:shadow-3xl transform hover:scale-105 transition-all duration-300 ease-out border-2 border-transparent hover:border-[#f8bbd9] w-auto min-w-0 max-w-full">
+                            <span className="mr-3 text-center whitespace-nowrap">Start Your Journey</span>
                             <svg
-                                ref={svgRef}
                                 className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300 flex-shrink-0"
                                 fill="none"
                                 stroke="currentColor"
@@ -126,11 +139,13 @@ const HomePage = () => {
                 <div className="block lg:hidden absolute bottom-32 right-4 w-20 h-20 bg-[#c2185b] opacity-5 rounded-full blur-2xl"></div>
 
                 {/* Scroll indicator with better mobile positioning */}
-                <div className="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2">
+                <div className="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-10">
                     <div className="flex flex-col items-center space-y-2 opacity-60 hover:opacity-100 transition-opacity duration-300">
-                        <span className="text-white text-xs sm:text-sm font-light">
-                            Scroll to explore
-                        </span>
+            <span className="text-white text-xs sm:text-sm font-light"
+                  style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.8)" }}
+            >
+                Scroll to explore
+            </span>
                         <div className="w-5 h-8 sm:w-6 sm:h-10 border-2 border-white rounded-full flex justify-center">
                             <div className="w-1 h-2 sm:h-3 bg-white rounded-full mt-1 sm:mt-2 animate-bounce"></div>
                         </div>
@@ -159,6 +174,9 @@ function Layout({ children }) {
             {/* Show Navbar only if not admin */}
             {!isAdminRoute && <Navbar />}
 
+            {/* Show Admin Navbar only if admin */}
+            {isAdminRoute && <AdminNavbar />}
+
             <main className="flex-grow">{children}</main>
 
             {/* Footer stays at bottom always */}
@@ -167,31 +185,86 @@ function Layout({ children }) {
     );
 }
 
+function Unauthorized() {
+    return null;
+}
+
 function App() {
     return (
-        <Router>
-            <Layout>
+        <AuthProvider>
+            <Router>
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/course/:courseId" element={<CourseDetailPage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/course" element={<CoursePage />} />
-                    <Route path="/blog" element={<BlogPage />} />
-                    <Route path="/blog/:blogId" element={<BlogDetail />} />
-                    <Route path="*" element={<NotFoundPage />} />
+                    {/* Public routes */}
+                    <Route path="/" element={<Layout><HomePage /></Layout>} />
+                    <Route path="/course/:courseId" element={<Layout><CourseDetailPage /></Layout>} />
+                    <Route path="/about" element={<Layout><AboutPage /></Layout>} />
+                    <Route path="/course" element={<Layout><CoursePage /></Layout>} />
+                    <Route path="/blog" element={<Layout><BlogPage /></Layout>} />
+                    <Route path="/blog/:blogId" element={<Layout><BlogDetail /></Layout>} />
+                    <Route path="/test" element={<Layout><Test /></Layout>} />
 
-                    {/* Admin routes */}
-                    <Route path="/admin/application" element={<AdminApplicationDashboard />} />
-                    <Route path="/admin/categories" element={<AdminCategoryDashboard />} />
-                    <Route path="/admin/courses" element={<AdminCourseDashboard />} />
-                    <Route path="/admin/blogs" element={<AdminBlogDashboard />} />
+                    {/* Auth routes */}
+                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route path="/unauthorized" element={<Unauthorized />} />
 
-                    <Route path="/test" element={<Test />} />
+                    {/* Protected Admin routes - NOW WITH AdminLayout! */}
+                    <Route
+                        path="/admin/home"
+                        element={
+                            <ProtectedRoute requireAdmin={true}>
+                                <AdminLayout>
+                                    <HomeDashboard />
+                                </AdminLayout>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/application"
+                        element={
+                            <ProtectedRoute requireAdmin={true}>
+                                <AdminLayout>
+                                    <AdminApplicationDashboard />
+                                </AdminLayout>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/categories"
+                        element={
+                            <ProtectedRoute requireAdmin={true}>
+                                <AdminLayout>
+                                    <AdminCategoryDashboard />
+                                </AdminLayout>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/courses"
+                        element={
+                            <ProtectedRoute requireAdmin={true}>
+                                <AdminLayout>
+                                    <AdminCourseDashboard />
+                                </AdminLayout>
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/blogs"
+                        element={
+                            <ProtectedRoute requireAdmin={true}>
+                                <AdminLayout>
+                                    <AdminBlogDashboard />
+                                </AdminLayout>
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* 404 route */}
+                    <Route path="*" element={<Layout><NotFoundPage /></Layout>} />
                 </Routes>
-            </Layout>
-        </Router>
+            </Router>
+        </AuthProvider>
     );
 }
 
-
-export default App
+export default App;

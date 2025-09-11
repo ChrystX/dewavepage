@@ -8,6 +8,7 @@ export default function TestimonialSection() {
     const [reviews, setReviews] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const containerRef = useRef(null);
+    const wrapperRef = useRef(null);
     const [slideWidth, setSlideWidth] = useState(0);
 
     // Fetch reviews
@@ -36,19 +37,18 @@ export default function TestimonialSection() {
         }
     }, [reviews]);
 
-    // Set slide width based on container size (responsive)
+    // Set slide width based on visible wrapper size (responsive)
     useEffect(() => {
         const updateSlideWidth = () => {
-            const container = containerRef.current?.parentElement;
-            if (container) {
-                setSlideWidth(container.offsetWidth);
+            if (wrapperRef.current) {
+                setSlideWidth(wrapperRef.current.offsetWidth);
             }
         };
 
         updateSlideWidth();
         window.addEventListener('resize', updateSlideWidth);
         return () => window.removeEventListener('resize', updateSlideWidth);
-    }, []);
+    }, [reviews.length]); // re-check after reviews load
 
     // Animate slide with GSAP
     useEffect(() => {
@@ -87,14 +87,18 @@ export default function TestimonialSection() {
                 </h2>
 
                 <div className="flex justify-center">
-                    <div className="overflow-hidden w-full">
+                    <div ref={wrapperRef} className="overflow-hidden w-full">
                         <div
                             ref={containerRef}
-                            className="flex gap-5"
+                            className="flex"
                             style={{ width: `${reviews.length * slideWidth}px` }}
                         >
                             {reviews.map((review, index) => (
-                                <div key={index} className="flex-shrink-0" style={{ width: slideWidth }}>
+                                <div
+                                    key={index}
+                                    className="flex-shrink-0"
+                                    style={{ width: slideWidth }}
+                                >
                                     <TestimonialCard
                                         name={review.author_name}
                                         role={review.role || "Student"}
