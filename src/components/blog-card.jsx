@@ -1,6 +1,9 @@
 import { Calendar, ArrowRight, Eye } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const BlogCard = ({ blog, index, size = 'default', onClick }) => {
+    const navigate = useNavigate();
+
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             month: 'short',
@@ -9,12 +12,15 @@ const BlogCard = ({ blog, index, size = 'default', onClick }) => {
     };
 
     const handleClick = () => {
-        if (onClick) {
+        // Navigate directly to blog detail page
+        if (blog.id) {
+            navigate(`/blog/${blog.id}`);
+        } else if (onClick) {
             onClick(blog);
         }
     };
 
-    // Size variants for different use cases
+    // Size variants
     const sizeClasses = {
         small: {
             container: 'min-w-[200px]',
@@ -56,8 +62,8 @@ const BlogCard = ({ blog, index, size = 'default', onClick }) => {
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#836953]/10 to-[#9d7d65]/20">
-                        <div className="text-lg font-medium text-[#836953]/60">
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#E91E63]/10 to-[#E91E63]/20">
+                        <div className="text-lg font-medium text-[#E91E63]/60">
                             {blog.title?.charAt(0) || 'B'}
                         </div>
                     </div>
@@ -73,21 +79,21 @@ const BlogCard = ({ blog, index, size = 'default', onClick }) => {
                 </div>
 
                 {/* Title */}
-                <h3 className={`text-gray-900 mb-2 line-clamp-2 group-hover:text-[#836953] transition-colors ${currentSize.title}`}>
+                <h3 className={`text-gray-900 mb-2 line-clamp-2 group-hover:text-[#E91E63] transition-colors ${currentSize.title}`}>
                     {blog.title}
                 </h3>
 
-                {/* Summary - only show for default size */}
+                {/* Summary */}
                 {size === 'default' && blog.summary && blog.summary !== 'string' && (
                     <p className={`text-gray-500 mb-4 ${currentSize.summary}`}>
                         {blog.summary}
                     </p>
                 )}
 
-                {/* Action - only show for default size */}
+                {/* Action */}
                 {size === 'default' && (
                     <div className="flex justify-end">
-                        <div className={`flex items-center gap-2 text-[#836953] font-medium group-hover:gap-3 transition-all ${currentSize.action}`}>
+                        <div className={`flex items-center gap-2 text-[#E91E63] font-medium group-hover:gap-3 transition-all ${currentSize.action}`}>
                             <Eye className="w-4 h-4" />
                             <span>Read</span>
                             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

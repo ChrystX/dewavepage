@@ -28,9 +28,7 @@ const useInView = (threshold = 0.1) => {
 
 const awards = [
     "/20 BEST CHOICE BUSINESS 2024.png",
-    "/BEST CHOICE BUSINESS 2024.png",
     "/BEST FRANCHISE 2022.png",
-    "/BUSINESS OPPORTUNITY 2022.jpg",
     "/BUSINESS OPPORTUNITY 2023.png",
     "/INDONESIA CREATIVITY & BEST LEADER AWARD 2023.png",
     "/LOGO MOST INNOVATIVE BO 2024.png",

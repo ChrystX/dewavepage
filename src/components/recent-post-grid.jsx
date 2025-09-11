@@ -3,20 +3,16 @@ import BlogCard from "./blog-card.jsx";
 const RecentPostsGrid = ({ blogs, onBlogClick }) => {
     if (!blogs || blogs.length === 0) return null;
 
-    // Transform blog data to match BlogCard expectations
     const transformBlogData = (blog) => ({
         ...blog,
-        // Map different image property names to thumbnailUrl
         thumbnailUrl: blog.thumbnailUrl || blog.imageUrl || blog.image,
-        // Map different date property names
         publishedAt: blog.publishedAt || blog.publishedDate || blog.createdAt,
-        // Ensure summary exists
         summary: blog.summary || blog.excerpt || blog.description
     });
 
     return (
         <>
-            {/* Mobile: Custom vertical cards (better UX than BlogCard) */}
+            {/* Mobile: Custom vertical cards */}
             <div className="sm:hidden space-y-6 px-2">
                 {blogs.slice(0, 4).map((blog, index) => {
                     const transformedBlog = transformBlogData(blog);
@@ -40,8 +36,8 @@ const RecentPostsGrid = ({ blogs, onBlogClick }) => {
 
                             {/* Fallback if no image */}
                             {(!transformedBlog.thumbnailUrl || transformedBlog.thumbnailUrl === 'string') && (
-                                <div className="aspect-video w-full flex items-center justify-center bg-gradient-to-br from-[#836953]/10 to-[#9d7d65]/20">
-                                    <div className="text-3xl font-bold text-[#836953]/60">
+                                <div className="aspect-video w-full flex items-center justify-center bg-gradient-to-br from-[#E91E63]/10 to-[#E91E63]/20">
+                                    <div className="text-3xl font-bold text-[#E91E63]/60">
                                         {transformedBlog.title?.charAt(0) || 'B'}
                                     </div>
                                 </div>
@@ -83,7 +79,7 @@ const RecentPostsGrid = ({ blogs, onBlogClick }) => {
                                             </>
                                         )}
                                     </div>
-                                    <div className="inline-flex items-center gap-1 text-[#836953] hover:text-[#9d7d65] font-medium transition-colors">
+                                    <div className="inline-flex items-center gap-1 text-[#E91E63] hover:text-[#C2185B] font-medium transition-colors">
                                         <span>Read</span>
                                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
@@ -100,7 +96,7 @@ const RecentPostsGrid = ({ blogs, onBlogClick }) => {
                     <div className="text-center pt-4 pb-2">
                         <button
                             onClick={() => onBlogClick && onBlogClick({ showAll: true })}
-                            className="inline-flex items-center gap-2 bg-[#836953] hover:bg-[#9d7d65] text-white px-6 py-3 rounded-xl shadow-sm font-medium transition-all duration-300 hover:shadow-md hover:scale-105"
+                            className="inline-flex items-center gap-2 bg-[#E91E63] hover:bg-[#C2185B] text-white px-6 py-3 rounded-xl shadow-sm font-medium transition-all duration-300 hover:shadow-md hover:scale-105"
                         >
                             <span>View All {blogs.length} Stories</span>
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

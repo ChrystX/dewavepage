@@ -6,7 +6,7 @@ const BlogCarouselSection = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 640); // sm breakpoint ~640px
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 640); // sm breakpoint
 
     useEffect(() => {
         const fetchBlogs = async () => {
@@ -24,11 +24,9 @@ const BlogCarouselSection = () => {
                 setLoading(false);
             }
         };
-
         fetchBlogs();
     }, []);
 
-    // Handle resize to detect mobile/desktop
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 640);
         window.addEventListener("resize", handleResize);
@@ -49,9 +47,9 @@ const BlogCarouselSection = () => {
                 <div className="max-w-7xl mx-auto px-3 sm:px-6">
                     {/* Section Header */}
                     <div className="text-center mb-8 sm:mb-12">
-                        <div className="inline-flex items-center gap-2 bg-[#e91e63]/10 backdrop-blur-sm rounded-full px-3 py-1.5 mb-3 sm:px-4 sm:py-2">
+                        <div className="inline-flex items-center gap-2 bg-[#E91E63]/10 backdrop-blur-sm rounded-full px-3 py-1.5 mb-3 sm:px-4 sm:py-2">
                             <svg
-                                className="w-4 h-4 text-[#e91e63] flex-shrink-0"
+                                className="w-4 h-4 text-[#E91E63] flex-shrink-0"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -63,37 +61,37 @@ const BlogCarouselSection = () => {
                                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                                 />
                             </svg>
-                            <span className="text-xs sm:text-sm font-medium text-[#e91e63] whitespace-nowrap">
+                            <span className="text-xs sm:text-sm font-medium text-[#E91E63] whitespace-nowrap">
                                 Latest Insights
                             </span>
                         </div>
 
                         <h2 className="text-xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 leading-snug px-2">
-                            Recent <span className="text-[#e91e63]">Stories</span>
+                            Recent <span className="text-[#E91E63]">Stories</span>
                         </h2>
                         <p className="text-gray-600 max-w-xl mx-auto text-sm sm:text-lg leading-relaxed px-4">
                             Discover the latest insights, tutorials, and expert perspectives from
                             our community
                         </p>
 
-                        <div className="relative mx-auto w-16 sm:w-24 h-1 bg-gradient-to-r from-transparent via-[#e91e63] to-transparent rounded-full mt-4 sm:mt-5"></div>
+                        <div className="relative mx-auto w-16 sm:w-24 h-1 bg-gradient-to-r from-transparent via-[#E91E63] to-transparent rounded-full mt-4 sm:mt-5"></div>
                     </div>
 
                     {/* Content */}
                     <div className="relative w-full overflow-hidden">
                         {loading ? (
                             <div className="text-center py-12">
-                                <div className="w-7 h-7 border-2 border-[#e91e63] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                                <div className="w-7 h-7 border-2 border-[#E91E63] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
                                 <p className="text-gray-600 text-sm">Loading stories...</p>
                             </div>
                         ) : error ? (
-                            <div className="text-center py-8 bg-white rounded-xl border border-gray-200 px-4 mx-2 sm:mx-0">
+                            <div className="text-center py-8 bg-white rounded-xl border border-[#E91E63]/40 px-4 mx-2 sm:mx-0">
                                 <p className="text-gray-500 mb-3 text-sm">
                                     Unable to load recent stories
                                 </p>
                                 <a
                                     href="/blog"
-                                    className="inline-flex items-center gap-2 text-[#e91e63] hover:text-[#c2185b] text-sm font-medium"
+                                    className="inline-flex items-center gap-2 text-[#E91E63] hover:text-[#C2185B] text-sm font-medium"
                                 >
                                     <span>View All Stories</span>
                                     <svg
@@ -124,7 +122,7 @@ const BlogCarouselSection = () => {
                                     <div className="text-center mt-6 sm:mt-8">
                                         <a
                                             href="/blog"
-                                            className="inline-flex items-center gap-2 bg-[#836953] hover:bg-[#9d7d65] text-white px-5 py-2.5 rounded-lg shadow-sm transition-colors text-sm sm:text-base"
+                                            className="inline-flex items-center gap-2 bg-[#E91E63] hover:bg-[#C2185B] text-white px-5 py-2.5 rounded-lg shadow-sm transition-colors text-sm sm:text-base"
                                         >
                                             <span>Explore All Stories</span>
                                             <svg
@@ -145,7 +143,7 @@ const BlogCarouselSection = () => {
                                 )}
                             </div>
                         ) : (
-                            <div className="text-center py-8 bg-white rounded-xl border border-gray-200 px-4 mx-2 sm:mx-0">
+                            <div className="text-center py-8 bg-white rounded-xl border border-[#E91E63]/40 px-4 mx-2 sm:mx-0">
                                 <p className="text-gray-500 text-sm">No stories available yet</p>
                             </div>
                         )}

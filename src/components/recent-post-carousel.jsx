@@ -14,97 +14,49 @@ const RecentPostsCarousel = ({ blogs }) => {
         const width = window.innerWidth;
 
         if (width < 480) {
-            // Mobile phones - show 1.2 cards
-            return {
-                visibleCount: 1.2,
-                cardWidth: Math.min(280, width - 32), // Account for padding
-                gap: 16
-            };
+            return { visibleCount: 1.2, cardWidth: Math.min(280, width - 32), gap: 16 };
         } else if (width < 640) {
-            // Large mobile phones - show 1.5 cards
-            return {
-                visibleCount: 1.5,
-                cardWidth: 260,
-                gap: 16
-            };
+            return { visibleCount: 1.5, cardWidth: 260, gap: 16 };
         } else if (width < 768) {
-            // Small tablets - show 2.3 cards
-            return {
-                visibleCount: 2.3,
-                cardWidth: 240,
-                gap: 16
-            };
+            return { visibleCount: 2.3, cardWidth: 240, gap: 16 };
         } else if (width < 1024) {
-            // Tablets - show 3 cards
-            return {
-                visibleCount: 3,
-                cardWidth: 280,
-                gap: 20
-            };
+            return { visibleCount: 3, cardWidth: 280, gap: 20 };
         } else if (width < 1280) {
-            // Small desktop - show 4 cards
-            return {
-                visibleCount: 4,
-                cardWidth: 300,
-                gap: 20
-            };
+            return { visibleCount: 4, cardWidth: 300, gap: 20 };
         } else {
-            // Large desktop - show 4-5 cards
-            return {
-                visibleCount: 4.5,
-                cardWidth: 320,
-                gap: 24
-            };
+            return { visibleCount: 4.5, cardWidth: 320, gap: 24 };
         }
     }, []);
 
     const updateLayout = useCallback(() => {
         const config = getResponsiveConfig();
         setVisibleCount(config.visibleCount);
-
-        // Calculate container width based on viewport
         const width = window.innerWidth;
-        setContainerWidth(width < 640 ? width - 32 : width - 64); // Account for padding
+        setContainerWidth(width < 640 ? width - 32 : width - 64);
     }, [getResponsiveConfig]);
 
-    // Handle window resize
     useEffect(() => {
         updateLayout();
         window.addEventListener('resize', updateLayout);
         return () => window.removeEventListener('resize', updateLayout);
     }, [updateLayout]);
 
-    // Calculate max index and card dimensions
     const config = getResponsiveConfig();
     const cardWidth = Math.floor((containerWidth - (config.gap * (Math.floor(config.visibleCount) - 1))) / config.visibleCount);
     const maxIndex = Math.max(0, blogs.length - Math.floor(config.visibleCount));
 
-    // Auto-rotate functionality
     useEffect(() => {
         if (blogs.length <= Math.floor(config.visibleCount)) return;
-
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
         }, 4000);
-
         return () => clearInterval(interval);
     }, [blogs.length, config.visibleCount, maxIndex]);
 
-    const nextSlide = () => {
-        setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-    };
-
-    const prevSlide = () => {
-        setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
-    };
-
-    const goToSlide = (index) => {
-        setCurrentIndex(Math.min(index, maxIndex));
-    };
-
-    const handleBlogClick = (blog) => {
-        navigate(`/blog/${blog.id}`);
-    };
+    const nextSlide = () => setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    const prevSlide = () => setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    const goToSlide = (index) => setCurrentIndex(Math.min(index, maxIndex));
+    const handleBlogClick = (blog) => navigate(`/blog/${blog.id}`);
 
     if (blogs.length === 0) return null;
 
@@ -116,12 +68,8 @@ const RecentPostsCarousel = ({ blogs }) => {
             {/* Header */}
             <div className="flex items-center justify-between mb-6 px-4 sm:px-8">
                 <div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
-                        Latest Stories
-                    </h2>
-                    <p className="text-gray-600 text-sm sm:text-base">
-                        Fresh content just published
-                    </p>
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Latest Stories</h2>
+                    <p className="text-gray-600 text-sm sm:text-base">Fresh content just published</p>
                 </div>
 
                 {/* Navigation controls */}
@@ -130,7 +78,7 @@ const RecentPostsCarousel = ({ blogs }) => {
                         <button
                             onClick={prevSlide}
                             disabled={currentIndex === 0}
-                            className="p-2.5 rounded-full border border-gray-200 hover:bg-[#836953] hover:text-white hover:border-[#836953] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="p-2.5 rounded-full border border-gray-200 hover:bg-[#E91E63] hover:text-white hover:border-[#E91E63] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             aria-label="Previous slide"
                         >
                             <ChevronLeft className="w-4 h-4" />
@@ -138,7 +86,7 @@ const RecentPostsCarousel = ({ blogs }) => {
                         <button
                             onClick={nextSlide}
                             disabled={currentIndex >= maxIndex}
-                            className="p-2.5 rounded-full border border-gray-200 hover:bg-[#836953] hover:text-white hover:border-[#836953] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="p-2.5 rounded-full border border-gray-200 hover:bg-[#E91E63] hover:text-white hover:border-[#E91E63] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             aria-label="Next slide"
                         >
                             <ChevronRight className="w-4 h-4" />
@@ -180,14 +128,14 @@ const RecentPostsCarousel = ({ blogs }) => {
                     <div className="flex sm:hidden justify-center gap-3 mt-4">
                         <button
                             onClick={prevSlide}
-                            className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-[#836953] hover:text-white transition-all duration-300 touch-manipulation"
+                            className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-[#E91E63] hover:text-white transition-all duration-300 touch-manipulation"
                             aria-label="Previous slide"
                         >
                             <ChevronLeft className="w-5 h-5" />
                         </button>
                         <button
                             onClick={nextSlide}
-                            className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-[#836953] hover:text-white transition-all duration-300 touch-manipulation"
+                            className="p-2 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-[#E91E63] hover:text-white transition-all duration-300 touch-manipulation"
                             aria-label="Next slide"
                         >
                             <ChevronRight className="w-5 h-5" />
@@ -205,7 +153,7 @@ const RecentPostsCarousel = ({ blogs }) => {
                             onClick={() => goToSlide(i)}
                             className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 touch-manipulation ${
                                 currentIndex === i
-                                    ? 'bg-[#836953] scale-125'
+                                    ? 'bg-[#E91E63] scale-125'
                                     : 'bg-gray-300 hover:bg-gray-400'
                             }`}
                             aria-label={`Go to slide ${i + 1}`}
