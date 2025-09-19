@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import {useAuth} from "../../contexts/AuthContext.jsx";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 
 const AdminLogin = () => {
     const [username, setUsername] = useState('');
@@ -15,7 +15,6 @@ const AdminLogin = () => {
     const from = location.state?.from?.pathname || '/admin/home';
 
     useEffect(() => {
-        // Redirect if already authenticated and admin
         if (isAuthenticated && isAdmin()) {
             navigate(from, { replace: true });
         }
@@ -39,6 +38,10 @@ const AdminLogin = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const goToHome = () => {
+        navigate('/');
     };
 
     return (
@@ -100,6 +103,15 @@ const AdminLogin = () => {
                             className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isLoading ? 'Signing in...' : 'Sign in'}
+                        </button>
+
+                        {/* Back to Home Button */}
+                        <button
+                            type="button"
+                            onClick={goToHome}
+                            className="mt-4 w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            &larr; Back to Home
                         </button>
                     </div>
                 </form>
