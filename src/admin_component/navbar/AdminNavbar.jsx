@@ -11,9 +11,10 @@ import {
     Settings,
     LayoutDashboard,
     LogOut,
-    User
+    User,
+    Home
 } from 'lucide-react';
-import {useAuth} from "../../contexts/AuthContext.jsx";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 
 const AdminNavbar = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -74,6 +75,11 @@ const AdminNavbar = () => {
 
     const cancelLogout = () => {
         setShowLogoutConfirm(false);
+    };
+
+    const goToHome = () => {
+        navigate('/');
+        setSidebarOpen(false);
     };
 
     return (
@@ -143,8 +149,20 @@ const AdminNavbar = () => {
                     ))}
                 </nav>
 
-                {/* Bottom Section with Settings and Logout */}
+                {/* Bottom Section with Home, Settings, and Logout */}
                 <div className="px-3 pb-4 border-t border-gray-200 space-y-2">
+                    {/* Back to Home */}
+                    <button
+                        onClick={goToHome}
+                        className="w-full flex items-center px-3 py-3 text-left text-sm font-medium rounded-lg transition-colors group text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                    >
+                        <Home className="w-5 h-5 mr-3 text-gray-500 group-hover:text-gray-700" />
+                        <div>
+                            <div className="font-medium">Back to Home</div>
+                            <div className="text-xs text-gray-500">Go to public main page</div>
+                        </div>
+                    </button>
+
                     <NavLink
                         to="/admin/settings"
                         onClick={() => setSidebarOpen(false)}
