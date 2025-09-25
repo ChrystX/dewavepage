@@ -9,6 +9,29 @@ const SectionItem = ({ section, index, isExpanded, onToggle }) => {
         return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
     };
 
+    const getYouTubeEmbedUrl = (url) => {
+        if (!url) return null;
+
+        // Extract video ID from various YouTube URL formats
+        const regexes = [
+            /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+            /youtube\.com\/watch\?.*v=([^&\n?#]+)/
+        ];
+
+        for (const regex of regexes) {
+            const match = url.match(regex);
+            if (match) {
+                return `https://www.youtube.com/embed/${match[1]}`;
+            }
+        }
+
+        return null;
+    };
+
+    const isYouTubeUrl = (url) => {
+        return url && (url.includes('youtube.com') || url.includes('youtu.be'));
+    };
+
     return (
         <div className="border-b border-gray-200">
             <div
@@ -51,10 +74,31 @@ const SectionItem = ({ section, index, isExpanded, onToggle }) => {
                     )}
                     {section.videoUrl && (
                         <div className="bg-gray-50 rounded-lg p-4">
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                                <Play className="w-4 h-4" />
-                                <span>Video content available</span>
-                            </div>
+                            {isYouTubeUrl(section.videoUrl) ? (
+                                <div className="aspect-video w-full">
+                                    <iframe
+                                        src={getYouTubeEmbedUrl(section.videoUrl)}
+                                        title={`${section.title} - Video`}
+                                        className="w-full h-full rounded-lg"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                </div>
+                            ) : (
+                                <div className="flex items-center gap-2 text-sm text-gray-600">
+                                    <Play className="w-4 h-4" />
+                                    <span>Video content available</span>
+                                    <a
+                                        href={section.videoUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:text-blue-800 underline ml-2"
+                                    >
+                                        Watch Video
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     )}
                     {section.thumbnailUrl && (
@@ -90,7 +134,32 @@ const CourseSectionsComponent = ({ sections }) => {
         total + (section.durationMinutes || 0), 0
     );
 
-    if (!sections || sections.length === 0) {
+    // Demo data with YouTube links for testing
+    const demoSections = sections || [
+        {
+            id: 1,
+            title: "Introduction to React Hooks",
+            durationMinutes: 25,
+            contentHtml: "<p>Learn the basics of React Hooks and how they can simplify your component logic.</p>",
+            videoUrl: "https://www.youtube.com/watch?v=O6P86uwfdR0"
+        },
+        {
+            id: 2,
+            title: "useState and useEffect Deep Dive",
+            durationMinutes: 35,
+            contentHtml: "<p>Master the most commonly used React Hooks with practical examples.</p>",
+            videoUrl: "https://youtu.be/f687hBjwFcM"
+        },
+        {
+            id: 3,
+            title: "Building Custom Hooks",
+            durationMinutes: 40,
+            contentHtml: "<p>Create reusable logic with custom hooks to keep your components clean and focused.</p>",
+            videoUrl: "https://www.youtube.com/embed/6ThXsUwLWvc"
+        }
+    ];
+
+    if (!demoSections || demoSections.length === 0) {
         return (
             <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div className="p-6 border-b">
@@ -105,17 +174,21 @@ const CourseSectionsComponent = ({ sections }) => {
         );
     }
 
+    const totalDurationDemo = demoSections.reduce((total, section) =>
+        total + (section.durationMinutes || 0), 0
+    );
+
     return (
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
             <div className="p-6 border-b">
                 <h2 className="text-2xl font-bold">Course Syllabus</h2>
                 <p className="text-gray-600 mt-2">
-                    {sections.length} lessons • {formatDuration(totalDuration)} total length
+                    {demoSections.length} lessons • {formatDuration(totalDurationDemo)} total length
                 </p>
             </div>
 
             <div>
-                {sections.map((section, index) => (
+                {demoSections.map((section, index) => (
                     <SectionItem
                         key={section.id}
                         section={section}
