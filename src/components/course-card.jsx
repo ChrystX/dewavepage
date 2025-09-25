@@ -20,6 +20,12 @@ const CourseCard = ({ course }) => {
         navigate(`/course/${course.id}`);
     };
 
+    // Same navigation function for title and image
+    const handleNavigateToDetail = (e) => {
+        e.stopPropagation();
+        navigate(`/course/${course.id}`);
+    };
+
     // Truncate title to ensure consistent length
     const truncateTitle = (title, maxLength = 60) => {
         if (!title) return 'Untitled Course';
@@ -29,7 +35,7 @@ const CourseCard = ({ course }) => {
 
     return (
         <div className="bg-white rounded-lg overflow-hidden shadow-sm h-full flex flex-col">
-            <div className="relative">
+            <div className="relative cursor-pointer" onClick={handleNavigateToDetail}>
                 <img
                     src={course.image?.trim() || "/no-image.png"}
                     alt={course.title}
@@ -37,15 +43,18 @@ const CourseCard = ({ course }) => {
                         e.target.onerror = null;
                         e.target.src = "/no-image.png";
                     }}
-                    className="w-full h-28 sm:h-36 object-cover"
+                    className="w-full h-28 sm:h-36 object-cover hover:opacity-90 transition-opacity duration-200"
                     loading="lazy"
                 />
             </div>
 
             <div className="p-3 flex flex-col flex-grow">
-                {/* Fixed height title container - always 2 lines */}
+                {/* Fixed height title container - always 2 lines - now clickable */}
                 <div className="h-10 mb-2">
-                    <h3 className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 leading-5">
+                    <h3
+                        className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 leading-5 cursor-pointer hover:text-pink-600 transition-colors duration-200"
+                        onClick={handleNavigateToDetail}
+                    >
                         {truncateTitle(course.title)}
                     </h3>
                 </div>
