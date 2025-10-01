@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SweeperContainer from "../components/sweeper-container.jsx";
 import useCourseData from "../hooks/useCourseData.js";

@@ -9,6 +9,31 @@ const SectionItem = ({ section, index, isExpanded, onToggle }) => {
         return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
     };
 
+
+    const isGoogleDriveUrl = (url) => {
+        return url && url.includes('drive.google.com');
+    };
+
+    const getGoogleDriveEmbedUrl = (url) => {
+        if (!url) return null;
+
+        // Extract file ID from various Google Drive URL formats
+        const regexes = [
+            /\/file\/d\/([^\/]+)/,  // /file/d/FILE_ID/view
+            /id=([^&]+)/,            // ?id=FILE_ID
+            /\/open\?id=([^&]+)/     // /open?id=FILE_ID
+        ];
+
+        for (const regex of regexes) {
+            const match = url.match(regex);
+            if (match) {
+                return `https://drive.google.com/file/d/${match[1]}/preview`;
+            }
+        }
+
+        return null;
+    };
+
     const getYouTubeEmbedUrl = (url) => {
         if (!url) return null;
 
@@ -79,9 +104,20 @@ const SectionItem = ({ section, index, isExpanded, onToggle }) => {
                                     <iframe
                                         src={getYouTubeEmbedUrl(section.videoUrl)}
                                         title={`${section.title} - Video`}
-                                        className="w-full h-full rounded-lg"
+                                        className="w-full h-full rounded-lg min-h-[250px] sm:min-h-[300px] md:min-h-0"
                                         frameBorder="0"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                </div>
+                            ) : isGoogleDriveUrl(section.videoUrl) ? (
+                                <div className="aspect-video w-full">
+                                    <iframe
+                                        src={getGoogleDriveEmbedUrl(section.videoUrl)}
+                                        title={`${section.title} - Video`}
+                                        className="w-full h-full rounded-lg min-h-[250px] sm:min-h-[300px] md:min-h-0"
+                                        frameBorder="0"
+                                        allow="autoplay"
                                         allowFullScreen
                                     />
                                 </div>

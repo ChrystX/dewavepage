@@ -80,7 +80,6 @@ const CourseDetailPage = () => {
     }, [courseId]);
 
     // Calculate navbar height based on scroll position (matching Navbar component logic)
-    const maxLogoScroll = 100;
     const logoHeight = Math.max(0, 48 - scrollY / 2);
     const navbarHeight = 80; // h-20 in Tailwind
     const totalNavbarHeight = logoHeight + navbarHeight;

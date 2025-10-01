@@ -72,14 +72,12 @@ const CourseCard = ({ course }) => {
                     </div>
                 </div>
 
-                {/* Fixed height description container */}
                 <div className="h-8 mb-3">
                     <p className="text-xs text-gray-600 line-clamp-2 leading-4">
                         {course.description || "No description available"}
                     </p>
                 </div>
 
-                {/* Button pushed to bottom */}
                 <button
                     onClick={handleViewProgram}
                     className="mt-auto w-full py-2 text-sm font-medium text-pink-600 border-2 border-pink-600 rounded-full transition-all duration-300 hover:bg-pink-600 hover:text-white hover:shadow-md active:scale-95"
