@@ -57,6 +57,7 @@ const NotFoundPage = () => {
 
 const HomePage = () => {
     const svgRef = useRef(null);
+    const affiliatesRef = useRef(null);
 
     useEffect(() => {
         gsap.to(svgRef.current, {
@@ -67,6 +68,13 @@ const HomePage = () => {
             repeat: -1,
         });
     }, []);
+
+    const scrollToNextSection = () => {
+        affiliatesRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    };
 
     return (
         <div className="overflow-x-hidden"> {/* Add this wrapper */}
@@ -111,7 +119,9 @@ const HomePage = () => {
 
                     {/* CTA button with improved mobile sizing */}
                     <div className="pt-6 sm:pt-8 md:pt-10 w-full flex justify-center px-4">
-                        <button className="group flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-4 bg-[#e91e63] text-white font-semibold text-base sm:text-lg md:text-xl rounded-full shadow-2xl hover:bg-[#c2185b] hover:shadow-3xl transform hover:scale-105 transition-all duration-300 ease-out border-2 border-transparent hover:border-[#f8bbd9] w-auto min-w-0 max-w-full">
+                        <button
+                            onClick={scrollToNextSection}
+                            className="group flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 md:px-10 md:py-4 bg-[#e91e63] text-white font-semibold text-base sm:text-lg md:text-xl rounded-full shadow-2xl hover:bg-[#c2185b] hover:shadow-3xl transform hover:scale-105 transition-all duration-300 ease-out border-2 border-transparent hover:border-[#f8bbd9] w-auto min-w-0 max-w-full">
                             <span className="mr-3 text-center whitespace-nowrap">Start Your Journey</span>
                             <svg
                                 className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300 flex-shrink-0"
@@ -154,7 +164,9 @@ const HomePage = () => {
             </main>
 
             <div className="w-full overflow-x-hidden"> {/* Wrap other components */}
-                <Affiliates />
+                <div ref={affiliatesRef}>
+                    <Affiliates />
+                </div>
                 <CategoryCourseSection />
                 <SweeperSection />
                 <BlogCarouselSection />
