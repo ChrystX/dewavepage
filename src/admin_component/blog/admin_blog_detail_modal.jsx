@@ -54,17 +54,25 @@ const BlogDetailModal = ({ isOpen, onClose, formData, setFormData, onSubmit }) =
                                         value={formData.content || ""}
                                         onEditorChange={(val) => handleChange("content", val)}
                                         init={{
-                                            height: 400,
-                                            menubar: true,
+                                            height: 500,
+                                            menubar: 'file edit view insert format tools table help',
+
+                                            // All plugins
                                             plugins: [
-                                                "advlist autolink lists link image charmap print preview anchor",
-                                                "searchreplace visualblocks code fullscreen",
-                                                "insertdatetime media table code help wordcount"
+                                                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                                                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                                                'insertdatetime', 'media', 'table', 'wordcount', 'help',
+                                                'emoticons', 'codesample', 'quickbars', 'pagebreak',
+                                                'nonbreaking', 'visualchars', 'directionality'
                                             ],
-                                            toolbar:
-                                                "undo redo | formatselect | bold italic underline strikethrough | \
-                                                alignleft aligncenter alignright alignjustify | \
-                                                bullist numlist outdent indent | removeformat | help"
+
+                                            // Complete toolbar
+                                            toolbar: 'undo redo | blocks fontfamily fontsize | ' +
+                                                'bold italic underline strikethrough | forecolor backcolor | ' +
+                                                'alignleft aligncenter alignright alignjustify | ' +
+                                                'bullist numlist outdent indent | removeformat | ' +
+                                                'link image media table | codesample code | ' +
+                                                'emoticons charmap | pagebreak hr | fullscreen preview help',
                                         }}
                                     />
                                 </div>
