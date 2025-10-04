@@ -26,6 +26,7 @@ import AdminLogin from "./admin_component/login/AdminLogin.jsx";
 import ProtectedRoute from "./admin_component/login/ProtectedRoute.jsx";
 import {AuthProvider} from "./contexts/AuthContext.jsx";
 import AdminLayout from "./components/AdminLayout.jsx";
+import AdminInstructorDashboard from "./admin_page/admin_instructor.jsx";
 
 const NotFoundPage = () => {
     return (
@@ -266,6 +267,17 @@ function App() {
                             <ProtectedRoute requireAdmin={true}>
                                 <AdminLayout>
                                     <AdminBlogDashboard />
+                                </AdminLayout>
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/instructors"
+                        element={
+                            <ProtectedRoute requireAdmin={true}>
+                                <AdminLayout>
+                                    <AdminInstructorDashboard />
                                 </AdminLayout>
                             </ProtectedRoute>
                         }

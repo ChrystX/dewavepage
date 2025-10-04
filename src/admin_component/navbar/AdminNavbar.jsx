@@ -57,6 +57,13 @@ const AdminNavbar = () => {
             icon: FileText,
             path: '/admin/blogs',
             description: 'Blog content management'
+        },
+        {
+            id: 'instructors',
+            label: 'Instructors',
+            icon: Users, // you can use a different icon if you like
+            path: '/admin/instructors',
+            description: 'Manage instructors'
         }
     ];
 
