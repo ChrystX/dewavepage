@@ -1,14 +1,40 @@
 import { Calendar, ArrowRight, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import {useState} from "react";
 
 const BlogCard = ({ blog, index, size = 'default', onClick }) => {
     const navigate = useNavigate();
+    const [imageError, setImageError] = useState(false);
+
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric'
         });
+    };
+
+    const getImageUrl = (url) => {
+        if (!url || url === 'string') return null;
+
+        // Check if it's a Google Drive URL with /d/ format
+        // Example: https://drive.google.com/file/d/FILE_ID/view
+        const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (driveMatch) {
+            const fileId = driveMatch[1];
+            // Convert to direct thumbnail URL (supports public files)
+            return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+        }
+
+        // Check for Google Drive URLs with id= format
+        // Example: https://drive.google.com/uc?id=FILE_ID
+        const idMatch = url.match(/id=([a-zA-Z0-9_-]+)/);
+        if (idMatch) {
+            return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w800`;
+        }
+
+        // Return original URL for non-Google Drive images
+        return url;
     };
 
     const handleClick = () => {
@@ -18,6 +44,10 @@ const BlogCard = ({ blog, index, size = 'default', onClick }) => {
         } else if (onClick) {
             onClick(blog);
         }
+    };
+
+    const handleImageError = () => {
+        setImageError(true);
     };
 
     // Size variants
@@ -43,6 +73,7 @@ const BlogCard = ({ blog, index, size = 'default', onClick }) => {
     };
 
     const currentSize = sizeClasses[size];
+    const imageUrl = getImageUrl(blog.thumbnailUrl);
 
     return (
         <div
@@ -55,11 +86,13 @@ const BlogCard = ({ blog, index, size = 'default', onClick }) => {
         >
             {/* Image */}
             <div className={`${currentSize.image} relative overflow-hidden`}>
-                {blog.thumbnailUrl && blog.thumbnailUrl !== 'string' ? (
+                {imageUrl && !imageError ? (
                     <img
-                        src={blog.thumbnailUrl}
+                        src={imageUrl}
                         alt={blog.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        onError={handleImageError}
+                        loading="lazy"
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#E91E63]/10 to-[#E91E63]/20">

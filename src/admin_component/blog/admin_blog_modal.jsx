@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { X, Save, Edit3, Trash2 } from 'lucide-react';
 
 const BlogModal = ({
@@ -19,6 +19,23 @@ const BlogModal = ({
         { value: 'published', label: 'Published' },
         { value: 'archived', label: 'Archived' }
     ];
+
+    const generateSlug = (title) => {
+        return title
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '') // Remove special characters
+            .replace(/\s+/g, '-') // Replace spaces with hyphens
+            .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+            .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+    };
+
+    useEffect(() => {
+        if (mode !== 'view' && formData.title) {
+            const newSlug = generateSlug(formData.title);
+            setFormData(prev => ({ ...prev, slug: newSlug }));
+        }
+    }, [formData.title, mode, setFormData]);
 
     if (!isOpen) return null;
 
@@ -137,16 +154,18 @@ const BlogModal = ({
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Slug *
+                                        Slug (Auto-generated) *
                                     </label>
                                     <input
                                         type="text"
-                                        value={formData.slug}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
-                                        placeholder="blog-url-slug"
-                                        required
+                                        value={formData.slug || ''}
+                                        readOnly
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 font-mono cursor-not-allowed"
+                                        placeholder="Slug will be auto-generated..."
                                     />
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Generated automatically from the title
+                                    </p>
                                 </div>
 
                                 <div>
