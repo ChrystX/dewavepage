@@ -1,6 +1,10 @@
 import { Calendar, ArrowRight } from 'lucide-react';
+import {useState} from "react";
 
 const CarouselBlogCard = ({ blog, index, onClick }) => {
+    const [imageError, setImageError] = useState(false);
+
+
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             month: 'short',
@@ -8,11 +12,40 @@ const CarouselBlogCard = ({ blog, index, onClick }) => {
         });
     };
 
+    const getImageUrl = (url) => {
+        if (!url || url === 'string') return null;
+
+        // Check if it's a Google Drive URL with /d/ format
+        // Example: https://drive.google.com/file/d/FILE_ID/view
+        const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (driveMatch) {
+            const fileId = driveMatch[1];
+            // Convert to direct thumbnail URL (supports public files)
+            return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+        }
+
+        // Check for Google Drive URLs with id= format
+        // Example: https://drive.google.com/uc?id=FILE_ID
+        const idMatch = url.match(/id=([a-zA-Z0-9_-]+)/);
+        if (idMatch) {
+            return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w800`;
+        }
+
+        // Return original URL for non-Google Drive images
+        return url;
+    };
+
     const handleClick = () => {
         if (onClick) {
             onClick(blog);
         }
     };
+
+    const handleImageError = () => {
+        setImageError(true);
+    };
+
+    const imageUrl = getImageUrl(blog.thumbnailUrl);
 
     return (
         <div
@@ -25,11 +58,12 @@ const CarouselBlogCard = ({ blog, index, onClick }) => {
         >
             <div className="aspect-[5/3] sm:aspect-[4/3] relative overflow-hidden">
                 {/* Background Image */}
-                {blog.thumbnailUrl && blog.thumbnailUrl !== 'string' ? (
+                {imageUrl && !imageError ? (
                     <img
-                        src={blog.thumbnailUrl}
+                        src={imageUrl}
                         alt={blog.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onError={handleImageError}
                         loading="lazy"
                     />
                 ) : (
