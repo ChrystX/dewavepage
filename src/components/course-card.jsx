@@ -1,8 +1,31 @@
+// CourseCard.jsx
 import { Clock, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+
+const getImageUrl = (url) => {
+    if (!url || url === 'string' || !url.trim()) return null;
+
+    // Check if it's a Google Drive URL with /d/ format
+    const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (driveMatch) {
+        const fileId = driveMatch[1];
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+    }
+
+    // Check for Google Drive URLs with id= format
+    const idMatch = url.match(/id=([a-zA-Z0-9_-]+)/);
+    if (idMatch) {
+        return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w800`;
+    }
+
+    // Return original URL for non-Google Drive images
+    return url;
+};
 
 const CourseCard = ({ course }) => {
     const navigate = useNavigate();
+    const [imageError, setImageError] = useState(false);
 
     const formatDuration = (minutes) => {
         if (!minutes) return 'N/A';
@@ -20,36 +43,36 @@ const CourseCard = ({ course }) => {
         navigate(`/course/${course.id}`);
     };
 
-    // Same navigation function for title and image
     const handleNavigateToDetail = (e) => {
         e.stopPropagation();
         navigate(`/course/${course.id}`);
     };
 
-    // Truncate title to ensure consistent length
     const truncateTitle = (title, maxLength = 60) => {
         if (!title) return 'Untitled Course';
         if (title.length <= maxLength) return title;
         return title.substring(0, maxLength).trim() + '...';
     };
 
+    const handleImageError = () => {
+        setImageError(true);
+    };
+
+    const imageUrl = getImageUrl(course.image) || "/no-image.png";
+
     return (
         <div className="bg-white rounded-lg overflow-hidden shadow-sm h-full flex flex-col">
             <div className="relative cursor-pointer" onClick={handleNavigateToDetail}>
                 <img
-                    src={course.image?.trim() || "/no-image.png"}
+                    src={imageError ? "/no-image.png" : imageUrl}
                     alt={course.title}
-                    onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "/no-image.png";
-                    }}
+                    onError={handleImageError}
                     className="w-full h-28 sm:h-36 object-cover hover:opacity-90 transition-opacity duration-200"
                     loading="lazy"
                 />
             </div>
 
             <div className="p-3 flex flex-col flex-grow">
-                {/* Fixed height title container - always 2 lines - now clickable */}
                 <div className="h-10 mb-2">
                     <h3
                         className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 leading-5 cursor-pointer hover:text-pink-600 transition-colors duration-200"

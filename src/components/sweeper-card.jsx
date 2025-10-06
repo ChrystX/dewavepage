@@ -1,4 +1,25 @@
+// SweeperCard.jsx
 import { useNavigate } from "react-router-dom";
+
+const getImageUrl = (url) => {
+    if (!url || url === 'string' || !url.trim()) return null;
+
+    // Check if it's a Google Drive URL with /d/ format
+    const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (driveMatch) {
+        const fileId = driveMatch[1];
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+    }
+
+    // Check for Google Drive URLs with id= format
+    const idMatch = url.match(/id=([a-zA-Z0-9_-]+)/);
+    if (idMatch) {
+        return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w800`;
+    }
+
+    // Return original URL for non-Google Drive images
+    return url;
+};
 
 const SweeperCard = ({ course }) => {
     const navigate = useNavigate();
@@ -6,6 +27,8 @@ const SweeperCard = ({ course }) => {
     const handleClick = () => {
         navigate(`/course/${course.id}`);
     };
+
+    const imageUrl = getImageUrl(course.image) || "/no-image.png";
 
     return (
         <div
@@ -30,7 +53,7 @@ const SweeperCard = ({ course }) => {
             {/* Image with Gradient Overlay */}
             <div className="absolute inset-0">
                 <img
-                    src={course.image}
+                    src={imageUrl}
                     alt={course.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
