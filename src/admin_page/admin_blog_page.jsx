@@ -49,7 +49,8 @@ const AdminBlogDashboard = () => {
     const [previewBlogData, setPreviewBlogData] = useState(null);
     const [previewFormData, setPreviewFormData] = useState({});
 
-    const BLOGS_API_URL = 'https://dewavefreeapi20250731173800.azurewebsites.net/api/Blogs';
+    const BLOGS_ADMIN_URL = 'https://dewavefreeapi20250731173800.azurewebsites.net/api/Blogs/All';
+    const BLOGS_API_URL = 'https://dewavefreeapi20250731173800.azurewebsites.net/api/Blogs/';
     const CATEGORIES_API_URL = 'https://dewavefreeapi20250731173800.azurewebsites.net/api/categories';
     const BLOG_DETAILS_API_URL = 'https://dewavefreeapi20250731173800.azurewebsites.net/api/BlogDetails';
 
@@ -84,7 +85,7 @@ const AdminBlogDashboard = () => {
     const fetchBlogs = async () => {
         setLoading(true);
         try {
-            const res = await fetch(BLOGS_API_URL);
+            const res = await fetch(BLOGS_ADMIN_URL);
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             const data = await res.json();
             setBlogs(data);
