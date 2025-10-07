@@ -8,13 +8,14 @@ import FaqModal from "../admin_component/course/faq_modal.jsx";
 import CourseDetailModal from "../admin_component/course/course_detail_modal.jsx";
 import CourseSectionModal from "../admin_component/course/course_section_modal.jsx";
 import CoursePreviewModal from "../admin_component/course/course_preview.jsx";
+import ManageCollaboratorsModal from "../admin_component/course/admin_course_collab_modal.jsx"; // NEW
 
 const AdminCourseDashboard = () => {
     const [courses, setCourses] = useState([]);
     const [filteredCourses, setFilteredCourses] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState('')
     const [statusFilter, setStatusFilter] = useState('all');
     const [categoryFilter, setCategoryFilter] = useState('all');
     const [message, setMessage] = useState({ type: '', text: '' });
@@ -34,7 +35,7 @@ const AdminCourseDashboard = () => {
         isActive: true
     });
     const [faqModalOpen, setFaqModalOpen] = useState(false);
-    const [faqModalMode, setFaqModalMode] = useState('create'); // 'create' or 'edit'
+    const [faqModalMode, setFaqModalMode] = useState('create');
     const [faqFormData, setFaqFormData] = useState({ id:null, question:'', answer:'', sortOrder:0, courseId:null });
     const [selectedCourseFaqs, setSelectedCourseFaqs] = useState([]);
 
@@ -46,9 +47,13 @@ const AdminCourseDashboard = () => {
     const [courseSectionModalOpen, setCourseSectionModalOpen] = useState(false);
     const [selectedCourseSectionId, setSelectedCourseSectionId] = useState(null);
 
-    // NEW: Course Preview Modal states
+    // Course Preview Modal states
     const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
     const [previewCourse, setPreviewCourse] = useState(null);
+
+    // NEW: Collaborators Modal states
+    const [collaboratorsModalOpen, setCollaboratorsModalOpen] = useState(false);
+    const [collaboratorsCourse, setCollaboratorsCourse] = useState(null);
 
     const closeFaqModal = () => {
         setFaqModalOpen(false);
@@ -77,7 +82,7 @@ const AdminCourseDashboard = () => {
         setSelectedCourseSectionId(null);
     };
 
-    // NEW: CoursePreview Modal functions
+    // CoursePreview Modal functions
     const openCoursePreview = (course) => {
         setPreviewCourse(course);
         setIsPreviewModalOpen(true);
@@ -86,6 +91,17 @@ const AdminCourseDashboard = () => {
     const closeCoursePreview = () => {
         setIsPreviewModalOpen(false);
         setPreviewCourse(null);
+    };
+
+    // NEW: Collaborators Modal functions
+    const openCollaboratorsModal = (course) => {
+        setCollaboratorsCourse(course);
+        setCollaboratorsModalOpen(true);
+    };
+
+    const closeCollaboratorsModal = () => {
+        setCollaboratorsModalOpen(false);
+        setCollaboratorsCourse(null);
     };
 
     const COURSES_API_URL = 'https://dewavefreeapi20250731173800.azurewebsites.net/api/courses';
@@ -105,7 +121,6 @@ const AdminCourseDashboard = () => {
             const res = await fetch(FAQ_API_URL);
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             const allFaqs = await res.json();
-            // Filter by courseId if provided
             setSelectedCourseFaqs(courseId ? allFaqs.filter(f => f.courseId === courseId) : allFaqs);
         } catch (err) {
             console.error('Error fetching FAQs:', err);
@@ -199,7 +214,6 @@ const AdminCourseDashboard = () => {
         }
     };
 
-    // Submit (create or update) FAQ
     const handleFaqSubmit = async () => {
         if (!faqFormData.question.trim()) return alert('Question is required');
 
@@ -222,7 +236,7 @@ const AdminCourseDashboard = () => {
 
             if (!res.ok) throw new Error('Failed to save FAQ');
 
-            await fetchFaqs(faqFormData.courseId); // refresh list
+            await fetchFaqs(faqFormData.courseId);
             closeFaqModal();
         } catch (err) {
             console.error(err);
@@ -230,13 +244,12 @@ const AdminCourseDashboard = () => {
         }
     };
 
-    // Delete FAQ
     const deleteFaq = async (id) => {
         if (!window.confirm('Delete this FAQ?')) return;
         try {
             const res = await fetch(`${FAQ_API_URL}/${id}`, { method:'DELETE' });
             if (!res.ok) throw new Error('Failed to delete FAQ');
-            await fetchFaqs(faqFormData.courseId); // refresh list
+            await fetchFaqs(faqFormData.courseId);
         } catch (err) {
             console.error(err);
             alert('Failed to delete FAQ');
@@ -275,7 +288,7 @@ const AdminCourseDashboard = () => {
 
             if (mode === 'create' || courseFaqs.length > 0) {
                 setSelectedCourseFaqs(courseFaqs);
-                setFaqModalOpen(true); // just open it immediately
+                setFaqModalOpen(true);
                 console.log(`FAQ modal opened for courseId ${courseId}. FAQs loaded:`, courseFaqs);
             } else {
                 alert('No FAQs available for this course');
@@ -343,12 +356,13 @@ const AdminCourseDashboard = () => {
                 <div className="-mx-4 sm:-mx-6 lg:-mx-22">
                     <CoursesTable
                         courses={filteredCourses}
-                        onView={openCoursePreview} // CHANGED: Now opens preview modal instead of edit modal
+                        onView={openCoursePreview}
                         onEdit={openModal}
                         onDelete={deleteCourse}
                         onFaq={(course) => openFaqModal('create', null, course.id)}
                         onManageDetails={(course) => openCourseDetailModal(course.id)}
                         onManageSections={(course) => openCourseSectionModal(course.id)}
+                        onManageCollaborators={openCollaboratorsModal} // NEW
                         getCategoryName={getCategoryName}
                         formatDuration={formatDuration}
                         formatRating={formatRating}
@@ -369,7 +383,7 @@ const AdminCourseDashboard = () => {
                     formData={faqFormData}
                     setFormData={setFaqFormData}
                     onSubmit={handleFaqSubmit}
-                    faqs={selectedCourseFaqs || []} // always at least an empty array
+                    faqs={selectedCourseFaqs || []}
                     onEdit={(faq) => openFaqModal('edit', faq, faq.courseId)}
                     onDelete={deleteFaq}
                 />
@@ -383,12 +397,17 @@ const AdminCourseDashboard = () => {
                     onClose={closeCourseSectionModal}
                     courseId={selectedCourseSectionId}
                 />
-                {/* NEW: Course Preview Modal */}
                 <CoursePreviewModal
                     isOpen={isPreviewModalOpen}
                     onClose={closeCoursePreview}
                     course={previewCourse}
                     courseId={previewCourse?.id}
+                />
+                {/* NEW: Manage Collaborators Modal */}
+                <ManageCollaboratorsModal
+                    isOpen={collaboratorsModalOpen}
+                    onClose={closeCollaboratorsModal}
+                    course={collaboratorsCourse}
                 />
             </div>
         </>

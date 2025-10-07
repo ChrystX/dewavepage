@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, Edit3, Trash2, HelpCircle, FileText, List, BookOpen, User, Clock, Star, Play, Plus } from 'lucide-react';
+import { Eye, Edit3, Trash2, HelpCircle, FileText, List, BookOpen, User, Clock, Star, Play, Plus, Users } from 'lucide-react';
 
 const CoursesTable = ({
                           courses,
@@ -9,6 +9,7 @@ const CoursesTable = ({
                           onFaq,
                           onManageDetails,
                           onManageSections,
+                          onManageCollaborators, // NEW
                           onAdd,
                           getCategoryName,
                           formatDuration,
@@ -148,6 +149,13 @@ const CoursesTable = ({
                                             title="Delete Course"
                                         >
                                             <Trash2 className="w-4 h-4" />
+                                        </button>
+                                        <button
+                                            onClick={() => onManageCollaborators(course)}
+                                            className="text-indigo-600 hover:text-indigo-800 p-2 rounded-lg hover:bg-indigo-50 transition-all duration-200"
+                                            title="Manage Collaborators"
+                                        >
+                                            <Users className="w-4 h-4" />
                                         </button>
                                         <button
                                             onClick={() => onFaq(course)}

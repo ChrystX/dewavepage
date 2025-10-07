@@ -15,7 +15,7 @@ export default function useCourseData() {
             setError(null);
 
             const response = await fetch(
-                "https://dewavefreeapiapi.azure-api.net/api/courses",
+                "https://dewavefreeapiapi.azure-api.net/api/courses/active",
                 { signal }
             );
             if (!response.ok) throw new Error(`Failed to fetch courses: ${response.status}`);
