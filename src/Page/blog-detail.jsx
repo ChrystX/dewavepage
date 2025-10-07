@@ -30,20 +30,42 @@ const BlogDetail = () => {
             setLoading(true);
             setError(null);
             try {
+                // Fetch blog details
                 const response = await fetch(
                     `https://dewavefreeapi20250731173800.azurewebsites.net/api/blogdetails/${blogId}`
                 );
                 if (!response.ok) throw new Error(`Failed to fetch blog details: ${response.status}`);
                 const data = await response.json();
                 setBlogDetail(data);
+
+                // Fetch blog data (includes viewCount)
+                const blogResponse = await fetch(
+                    `https://dewavefreeapi20250731173800.azurewebsites.net/api/blogs/${blogId}`
+                );
+                if (!blogResponse.ok) throw new Error(`Failed to fetch blog: ${blogResponse.status}`);
+                const blogData = await blogResponse.json();
+
                 setBlog({
                     blogId: data.blogId,
-                    title: data.seoTitle || 'Blog Post',
-                    summary: data.seoDescription || '',
-                    thumbnailUrl: null,
-                    publishedAt: new Date().toISOString(),
-                    viewCount: Math.floor(Math.random() * 1000) + 100 // Mock view count
+                    title: data.seoTitle || blogData.title || 'Blog Post',
+                    summary: data.seoDescription || blogData.summary || '',
+                    thumbnailUrl: blogData.thumbnailUrl || null,
+                    publishedAt: blogData.publishedAt || blogData.createdAt || new Date().toISOString(),
+                    viewCount: blogData.viewCount || 0 // Use real view count from API
                 });
+
+                // Increment view count after successful fetch
+                try {
+                    await fetch(
+                        `https://dewavefreeapi20250731173800.azurewebsites.net/api/blogs/${blogId}/increment-view`,
+                        { method: 'POST' }
+                    );
+                    // Optionally update local state to reflect the increment immediately
+                    setBlog(prev => prev ? { ...prev, viewCount: prev.viewCount + 1 } : null);
+                } catch (viewError) {
+                    // Silently fail if view count increment fails (non-critical)
+                    console.warn('Failed to increment view count:', viewError);
+                }
             } catch (err) {
                 setError(err.message);
             } finally {
