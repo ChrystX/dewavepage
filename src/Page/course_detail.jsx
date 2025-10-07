@@ -6,12 +6,14 @@ import { useParams } from "react-router-dom";
 import FaqSection from "../components/course-faq.jsx";
 import CourseDescription from "../components/course-description.jsx";
 import CourseBenefits from "../components/course-benefit.jsx";
+import Collaborators from "../components/collaborators-section.jsx";
 
 const CourseDetailPage = () => {
     const { courseId } = useParams();
     const [courseDetail, setCourseDetail] = useState(null);
     const [courseSections, setCourseSections] = useState([]);
     const [courseFaqs, setCourseFaqs] = useState([]);
+    const [collaborators, setCollaborators] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [course, setCourse] = useState(null);
@@ -31,28 +33,28 @@ const CourseDetailPage = () => {
             try {
                 setLoading(true);
 
-                const [detailsResponse, sectionsResponse, faqsResponse, coursesResponse] = await Promise.all([
+                const [detailsResponse, sectionsResponse, faqsResponse, coursesResponse, collaboratorsResponse] = await Promise.all([
                     fetch(`${API_BASE}/CourseDetails`),
                     fetch(`${API_BASE}/CourseSections`),
                     fetch(`${API_BASE}/CourseFaqs`),
                     fetch(`${API_BASE}/Courses`),
+                    fetch(`${API_BASE}/CourseInstructors/course/${courseId}`), // Changed endpoint
                 ]);
 
                 if (!detailsResponse.ok || !sectionsResponse.ok || !faqsResponse.ok) {
                     throw new Error("Failed to fetch course data");
                 }
 
-                const [allDetails, allSections, allFaqs, allCourses] = await Promise.all([
+                const [allDetails, allSections, allFaqs, allCourses, allCollaborators] = await Promise.all([
                     detailsResponse.json(),
                     sectionsResponse.json(),
                     faqsResponse.json(),
                     coursesResponse.json(),
+                    collaboratorsResponse.ok ? collaboratorsResponse.json() : Promise.resolve([]),
                 ]);
 
                 const courseDetails = allDetails.find((detail) => detail.courseId === parseInt(courseId));
-                const courseInfo = allCourses.find(
-                    (c) => c.id === parseInt(courseId)
-                );
+                const courseInfo = allCourses.find((c) => c.id === parseInt(courseId));
                 const filteredSections = allSections
                     .filter((section) => section.courseId === parseInt(courseId))
                     .sort((a, b) => a.sortOrder - b.sortOrder);
@@ -64,6 +66,7 @@ const CourseDetailPage = () => {
                 setCourse(courseInfo);
                 setCourseSections(filteredSections);
                 setCourseFaqs(filteredFaqs);
+                setCollaborators(allCollaborators); // Set collaborators instead of instructors
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -87,7 +90,6 @@ const CourseDetailPage = () => {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white">
-                {/* Spacer for navbar */}
                 <div
                     className="fixed top-0 left-0 w-full transition-all duration-300 ease-in-out"
                     style={{ height: `${totalNavbarHeight}px` }}
@@ -100,7 +102,6 @@ const CourseDetailPage = () => {
     if (error) {
         return (
             <div className="min-h-screen bg-white">
-                {/* Spacer for navbar */}
                 <div
                     className="w-full transition-all duration-300 ease-in-out"
                     style={{ height: `${totalNavbarHeight}px` }}
@@ -129,7 +130,7 @@ const CourseDetailPage = () => {
                 style={{ height: `${totalNavbarHeight}px` }}
             />
 
-            {/* Header Bar - Now positioned below navbar */}
+            {/* Header Bar */}
             <header className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 z-20 shadow-sm"
                     style={{ top: `${totalNavbarHeight}px` }}>
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
@@ -183,6 +184,14 @@ const CourseDetailPage = () => {
                         <p className="text-sm text-gray-600 mt-1">Common questions and answers about this course</p>
                     </div>
                     <FaqSection faqs={courseFaqs} />
+                </section>
+
+                <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-12 sm:mb-14">
+                    <div className="border-b border-gray-200 pb-3 mb-6">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Collaborators</h2>
+                        <p className="text-sm text-gray-600 mt-1">Meet your course collaborators</p>
+                    </div>
+                    <Collaborators collaborators={collaborators} loading={loading} />
                 </section>
             </div>
         </main>

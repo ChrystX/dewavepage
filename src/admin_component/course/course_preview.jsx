@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { X, ArrowLeft, Clock, Star, User, BookOpen, Play, CheckCircle } from 'lucide-react';
+import { X, ArrowLeft, Clock, Star, User, BookOpen, Play, CheckCircle, Mail, Phone, Award, Users } from 'lucide-react';
 
 const CoursePreviewModal = ({ isOpen, onClose, course, courseId }) => {
     const [courseDetail, setCourseDetail] = useState(null);
     const [courseSections, setCourseSections] = useState([]);
     const [courseFaqs, setCourseFaqs] = useState([]);
+    const [courseInstructors, setCourseInstructors] = useState([]);
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -19,10 +20,11 @@ const CoursePreviewModal = ({ isOpen, onClose, course, courseId }) => {
     const fetchCourseData = async () => {
         setLoading(true);
         try {
-            const [detailsResponse, sectionsResponse, faqsResponse] = await Promise.all([
+            const [detailsResponse, sectionsResponse, faqsResponse, instructorsResponse] = await Promise.all([
                 fetch(`${API_BASE}/CourseDetails`),
                 fetch(`${API_BASE}/CourseSections`),
                 fetch(`${API_BASE}/CourseFaqs`),
+                fetch(`${API_BASE}/CourseInstructors/course/${courseId}`),
             ]);
 
             if (detailsResponse.ok) {
@@ -45,6 +47,13 @@ const CoursePreviewModal = ({ isOpen, onClose, course, courseId }) => {
                     .filter((faq) => faq.courseId === parseInt(courseId))
                     .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
                 setCourseFaqs(filteredFaqs);
+            }
+
+            if (instructorsResponse.ok) {
+                const instructors = await instructorsResponse.json();
+                setCourseInstructors(instructors);
+            } else {
+                setCourseInstructors([]);
             }
         } catch (error) {
             console.error('Error fetching course data:', error);
@@ -102,6 +111,18 @@ const CoursePreviewModal = ({ isOpen, onClose, course, courseId }) => {
                             >
                                 Overview
                             </button>
+                            {courseInstructors.length > 0 && (
+                                <button
+                                    onClick={() => setActiveTab('instructors')}
+                                    className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                                        activeTab === 'instructors'
+                                            ? 'bg-blue-100 text-blue-700 font-medium'
+                                            : 'text-gray-600 hover:bg-gray-100'
+                                    }`}
+                                >
+                                    Instructors ({courseInstructors.length})
+                                </button>
+                            )}
                             <button
                                 onClick={() => setActiveTab('description')}
                                 className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
@@ -207,6 +228,93 @@ const CoursePreviewModal = ({ isOpen, onClose, course, courseId }) => {
                                                     </div>
                                                 ))}
                                             </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Instructors Tab - NEW */}
+                                {activeTab === 'instructors' && (
+                                    <div className="space-y-6">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-2xl font-bold text-gray-900">Course Instructors</h3>
+                                            <span className="text-sm text-gray-500">{courseInstructors.length} instructors</span>
+                                        </div>
+
+                                        <div className="space-y-6">
+                                            {courseInstructors.map((instructor) => (
+                                                <div
+                                                    key={instructor.instructorId}
+                                                    className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
+                                                >
+                                                    <div className="flex flex-col sm:flex-row gap-6">
+                                                        <div className="flex-shrink-0">
+                                                            <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-blue-400 to-purple-500 border-2 border-gray-200">
+                                                                {instructor.imageUrl ? (
+                                                                    <img
+                                                                        src={instructor.imageUrl}
+                                                                        alt={instructor.name}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                ) : (
+                                                                    <div className="w-full h-full flex items-center justify-center text-white text-3xl font-bold">
+                                                                        {instructor.name?.charAt(0) || "?"}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex-1 space-y-3">
+                                                            <div>
+                                                                <h4 className="text-xl font-bold text-gray-900">{instructor.name}</h4>
+                                                                {instructor.role && (
+                                                                    <span className="inline-block mt-1 px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                                                                        {instructor.role}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+
+                                                            {instructor.bio && (
+                                                                <p className="text-gray-600 text-sm leading-relaxed">{instructor.bio}</p>
+                                                            )}
+
+                                                            <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                                                                {instructor.contactEmail && (
+                                                                    <div className="flex items-center gap-2">
+                                                                        <Mail size={16} className="text-gray-400" />
+                                                                        <a
+                                                                            href={`mailto:${instructor.contactEmail}`}
+                                                                            className="hover:text-blue-600 transition-colors"
+                                                                        >
+                                                                            {instructor.contactEmail}
+                                                                        </a>
+                                                                    </div>
+                                                                )}
+                                                                {instructor.phoneNumber && (
+                                                                    <div className="flex items-center gap-2">
+                                                                        <Phone size={16} className="text-gray-400" />
+                                                                        <a
+                                                                            href={`tel:${instructor.phoneNumber}`}
+                                                                            className="hover:text-blue-600 transition-colors"
+                                                                        >
+                                                                            {instructor.phoneNumber}
+                                                                        </a>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+
+                                                            {instructor.certifications && (
+                                                                <div className="flex items-start gap-2 pt-2 border-t border-gray-100">
+                                                                    <Award size={16} className="text-gray-400 mt-0.5 flex-shrink-0" />
+                                                                    <div className="text-sm text-gray-600">
+                                                                        <span className="font-medium">Certifications: </span>
+                                                                        {instructor.certifications}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 )}
