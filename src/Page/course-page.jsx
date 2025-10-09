@@ -96,7 +96,7 @@ const CoursePage = () => {
             {/* Spacer for fixed navbar */}
             <div
                 className="w-full transition-all duration-300 ease-in-out"
-                style={{ height: `${totalNavbarHeight}px` }}
+                style={{ height: window.innerWidth >= 768 ? `${totalNavbarHeight}px` : '80px' }}
             />
 
             {/* Hero Header Section */}

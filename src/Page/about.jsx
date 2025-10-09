@@ -147,7 +147,7 @@ const AboutPage = () => {
 
     return (
         <div className="min-h-screen bg-white overflow-x-hidden"
-             style={{ paddingTop: `${navbarHeight + 20}px` }}>
+             style={{ paddingTop: window.innerWidth >= 768 ? `${navbarHeight + 20}px` : '80px' }}>
 
             {/* Vision Section */}
             <section
