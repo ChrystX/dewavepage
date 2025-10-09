@@ -247,24 +247,24 @@ const BlogDetail = () => {
                 {/* Article Container */}
                 <article className="bg-white rounded-xl shadow-lg overflow-hidden">
                     {/* Featured Image */}
-                    {blog.thumbnailUrl && blog.thumbnailUrl !== 'string' && (
-                        <div className="relative h-64 sm:h-80 lg:h-96 overflow-hidden">
-                            <img
-                                src={blog.thumbnailUrl}
-                                alt={blog.title}
-                                className={`w-full h-full object-cover transition-all duration-500 ${
-                                    isImageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-                                }`}
-                                onLoad={() => setIsImageLoaded(true)}
-                            />
-                            {!isImageLoaded && (
-                                <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-                                    <div className="w-8 h-8 border-4 border-[#e91e63] border-t-transparent rounded-full animate-spin"></div>
-                                </div>
-                            )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                        </div>
-                    )}
+                    {/*{blog.thumbnailUrl && blog.thumbnailUrl !== 'string' && (*/}
+                    {/*    <div className="relative h-64 sm:h-80 lg:h-96 overflow-hidden">*/}
+                    {/*        <img*/}
+                    {/*            src={blog.thumbnailUrl}*/}
+                    {/*            alt={blog.title}*/}
+                    {/*            className={`w-full h-full object-cover transition-all duration-500 ${*/}
+                    {/*                isImageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'*/}
+                    {/*            }`}*/}
+                    {/*            onLoad={() => setIsImageLoaded(true)}*/}
+                    {/*        />*/}
+                    {/*        {!isImageLoaded && (*/}
+                    {/*            <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">*/}
+                    {/*                <div className="w-8 h-8 border-4 border-[#e91e63] border-t-transparent rounded-full animate-spin"></div>*/}
+                    {/*            </div>*/}
+                    {/*        )}*/}
+                    {/*        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
 
                     <div className="p-6 sm:p-8 lg:p-12">
                         {/* Article Header */}

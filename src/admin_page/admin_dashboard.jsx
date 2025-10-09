@@ -418,6 +418,45 @@ const HomeDashboard = () => {
                     />
                 </div>
 
+                {/* Top Blogs by Views */}
+                <div className="bg-white border border-gray-200 p-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <Eye className="w-5 h-5 mr-2 text-blue-600" />
+                        Most Viewed Blogs
+                    </h3>
+                    <div className="space-y-3 max-h-80 overflow-y-auto pr-2">
+                        {data.blogs
+                            .filter(blog => blog.status?.toLowerCase() === 'published')
+                            .sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0))
+                            .slice(0, 5)
+                            .map((blog, index) => (
+                                <div key={blog.id} className="flex items-start space-x-3 p-3 bg-gray-50 border border-gray-100 hover:bg-gray-100 transition-colors">
+                                    <div className="flex-shrink-0">
+                                        <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                                            {index + 1}
+                                        </div>
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-medium text-gray-900 truncate">
+                                            {blog.title}
+                                        </p>
+                                        <div className="flex items-center mt-1 space-x-2 text-xs text-gray-500">
+                                            <Eye className="w-3 h-3" />
+                                            <span className="font-semibold text-blue-600">{blog.viewCount || 0}</span>
+                                            <span>views</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        {data.blogs.filter(blog => blog.status?.toLowerCase() === 'published').length === 0 && (
+                            <div className="text-center py-8 text-gray-500">
+                                <Eye className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                <p className="text-sm">No published blogs yet</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
                 {/* Footer Stats */}
                 <div className="bg-white border border-gray-200 p-6 text-center">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

@@ -3,6 +3,23 @@ import BlogCard from "./blog-card.jsx";
 const RecentPostsGrid = ({ blogs, onBlogClick }) => {
     if (!blogs || blogs.length === 0) return null;
 
+    const getImageUrl = (url) => {
+        if (!url || url === 'string') return null;
+
+        const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (driveMatch) {
+            const fileId = driveMatch[1];
+            return `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+        }
+
+        const idMatch = url.match(/id=([a-zA-Z0-9_-]+)/);
+        if (idMatch) {
+            return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w800`;
+        }
+
+        return url;
+    };
+
     const transformBlogData = (blog) => ({
         ...blog,
         thumbnailUrl: blog.thumbnailUrl || blog.imageUrl || blog.image,
@@ -23,25 +40,25 @@ const RecentPostsGrid = ({ blogs, onBlogClick }) => {
                             onClick={() => onBlogClick && onBlogClick(blog)}
                         >
                             {/* Image */}
-                            {transformedBlog.thumbnailUrl && transformedBlog.thumbnailUrl !== 'string' && (
-                                <div className="aspect-video w-full overflow-hidden">
-                                    <img
-                                        src={transformedBlog.thumbnailUrl}
-                                        alt={transformedBlog.title}
-                                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                                        loading="lazy"
-                                    />
-                                </div>
-                            )}
-
-                            {/* Fallback if no image */}
-                            {(!transformedBlog.thumbnailUrl || transformedBlog.thumbnailUrl === 'string') && (
-                                <div className="aspect-video w-full flex items-center justify-center bg-gradient-to-br from-[#E91E63]/10 to-[#E91E63]/20">
-                                    <div className="text-3xl font-bold text-[#E91E63]/60">
-                                        {transformedBlog.title?.charAt(0) || 'B'}
+                            {(() => {
+                                const imageUrl = getImageUrl(transformedBlog.thumbnailUrl);
+                                return imageUrl ? (
+                                    <div className="aspect-video w-full overflow-hidden">
+                                        <img
+                                            src={imageUrl}
+                                            alt={transformedBlog.title}
+                                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                            loading="lazy"
+                                        />
                                     </div>
-                                </div>
-                            )}
+                                ) : (
+                                    <div className="aspect-video w-full flex items-center justify-center bg-gradient-to-br from-[#E91E63]/10 to-[#E91E63]/20">
+                                        <div className="text-3xl font-bold text-[#E91E63]/60">
+                                            {transformedBlog.title?.charAt(0) || 'B'}
+                                        </div>
+                                    </div>
+                                );
+                            })()}
 
                             {/* Content */}
                             <div className="p-5">

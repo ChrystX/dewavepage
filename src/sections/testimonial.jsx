@@ -15,7 +15,7 @@ export default function TestimonialSection() {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const response = await fetch('/api/review');
+                const response = await fetch('/api/review?sort=newest');
                 const data = await response.json();
                 if (Array.isArray(data)) setReviews(data);
                 else console.error('No reviews found.');
@@ -104,7 +104,7 @@ export default function TestimonialSection() {
                                         role={review.role || "Student"}
                                         content={review.text}
                                         rating={review.rating}
-                                        imageUrl={review.profile_photo_url}
+                                        imageUrl={review.profile_photo_url || review.author_url}
                                     />
                                 </div>
                             ))}
@@ -121,6 +121,7 @@ export default function TestimonialSection() {
                             className={`w-2 h-2 rounded-full transition-colors duration-300 ${
                                 index === currentIndex ? 'bg-blue-600' : 'bg-gray-300'
                             }`}
+                            aria-label={`Go to review ${index + 1}`}
                         />
                     ))}
                 </div>
