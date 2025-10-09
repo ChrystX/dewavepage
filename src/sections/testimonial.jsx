@@ -104,7 +104,7 @@ export default function TestimonialSection() {
                                         role={review.role || "Student"}
                                         content={review.text}
                                         rating={review.rating}
-                                        imageUrl={review.profile_photo_url || review.author_url}
+                                        profile_photo_url={review.profile_photo_url || review.author_url}
                                     />
                                 </div>
                             ))}
